@@ -1,13 +1,12 @@
-﻿-- Create the database and set context
-CREATE DATABASE CourseSellingWebsite;
+﻿CREATE DATABASE CourseSellingWebsite;
 GO
 
 USE CourseSellingWebsite;
 GO
 
--- Teacher table (formerly GiaoVien)
+-- Teacher table
 CREATE TABLE dbo.Teacher (
-    TeacherID           NVARCHAR(20)    NOT NULL PRIMARY KEY,  -- e.g. TeacherXXX
+    TeacherID           VARCHAR(20)		NOT NULL PRIMARY KEY,
     FullName            NVARCHAR(200)   NOT NULL,
 	PassHash            VARCHAR(MAX)    NOT NULL,
     AvatarUrl           NVARCHAR(1000)  NULL,
@@ -16,30 +15,48 @@ CREATE TABLE dbo.Teacher (
     PhoneNumber         NVARCHAR(50)    NULL,
     Description         NVARCHAR(MAX)   NULL,
     CreatedAt           DATETIME        NOT NULL DEFAULT GETDATE()
-
 );
 GO
 
--- Course table (formerly KhoaHoc)
+-- Course Subject
+CREATE TABLE dbo.Subject (
+    SubjectID			VARCHAR(30)		NOT NULL PRIMARY KEY,
+    Name				INT				NOT NULL UNIQUE
+);
+GO
+
+-- GradeLevel table
+CREATE TABLE dbo.GradeLevel (
+    GradeID				INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    Name				NVARCHAR(100)     NOT NULL UNIQUE
+);
+GO
+
+-- Course table
 CREATE TABLE dbo.Course (
-    CourseID            NVARCHAR(20)    NOT NULL PRIMARY KEY,  -- e.g. CourseXXX
-    Subject             NVARCHAR(100)   NOT NULL,
+    CourseID            VARCHAR(20)		NOT NULL PRIMARY KEY,
+    SubjectID           VARCHAR(30)		NOT NULL,
+	GradeID				INT				NOT NULL,
     Title               NVARCHAR(300)   NOT NULL,
     ImageUrl            NVARCHAR(1000)  NULL,
     Description         NVARCHAR(MAX)   NOT NULL,
     Price               DECIMAL(10,2)   NOT NULL,
+	DiscountPercent		DECIMAL(5,2)	NOT NULL DEFAULT (0),
     DurationDays        INT             NOT NULL DEFAULT 150,
-    TeacherID           NVARCHAR(20)    NOT NULL,
+    TeacherID           VARCHAR(20)		NOT NULL,
     UpdatedAt           DATETIME        NOT NULL DEFAULT GETDATE(),
-    CONSTRAINT FK_Course_Teacher
-      FOREIGN KEY(TeacherID) REFERENCES dbo.Teacher(TeacherID)
-      ON UPDATE CASCADE ON DELETE NO ACTION
+    FOREIGN KEY(TeacherID) REFERENCES dbo.Teacher(TeacherID)
+		ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY(SubjectID) REFERENCES dbo.Subject(SubjectID)
+		ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY(GradeID) REFERENCES dbo.GradeLevel(GradeID)
+		ON UPDATE CASCADE ON DELETE CASCADE
 );
 GO
 
--- CourseGoal table (formerly MucTieuKhoaHoc)
+-- CourseGoal table
 CREATE TABLE dbo.CourseGoal (
-    CourseID            NVARCHAR(20)    NOT NULL,
+    CourseID            VARCHAR(20)    NOT NULL,
     GoalOrder           INT             NOT NULL,
     Content             NVARCHAR(1000)  NOT NULL,
     PRIMARY KEY (CourseID, GoalOrder),
@@ -48,9 +65,9 @@ CREATE TABLE dbo.CourseGoal (
 );
 GO
 
--- CourseRequirement table (formerly YeuCauKhoaHoc)
+-- CourseRequirement table
 CREATE TABLE dbo.CourseRequirement (
-    CourseID            NVARCHAR(20)    NOT NULL,
+    CourseID            VARCHAR(20)    NOT NULL,
     RequirementOrder    INT             NOT NULL,
     Content             NVARCHAR(1000)  NOT NULL,
     PRIMARY KEY (CourseID, RequirementOrder),
@@ -59,77 +76,114 @@ CREATE TABLE dbo.CourseRequirement (
 );
 GO
 
--- Lesson table (formerly BaiHoc)
+-- Lesson table
 CREATE TABLE dbo.Lesson (
-    LessonID            NVARCHAR(30)    NOT NULL PRIMARY KEY,  -- e.g. CourseXXX_01
-    CourseID            NVARCHAR(20)    NOT NULL,
+    LessonID            VARCHAR(30)    NOT NULL PRIMARY KEY,
+    CourseID            VARCHAR(20)    NOT NULL,
     LessonOrder         INT             NOT NULL,
     Title               NVARCHAR(200)   NULL,
     VideoUrl            NVARCHAR(1000)  NOT NULL,
     CreatedAt           DATETIME        NOT NULL DEFAULT GETDATE(),
-    CONSTRAINT FK_Lesson_Course
-      FOREIGN KEY(CourseID) REFERENCES dbo.Course(CourseID)
+    FOREIGN KEY(CourseID) REFERENCES dbo.Course(CourseID)
       ON UPDATE CASCADE ON DELETE CASCADE
 );
 GO
 
--- Student table (formerly HocSinh)
+-- Student table
 CREATE TABLE dbo.Student (
-    StudentID           NVARCHAR(20)    NOT NULL PRIMARY KEY,  -- e.g. StudentXXX
+    StudentID           VARCHAR(20)    NOT NULL PRIMARY KEY,
     FullName            NVARCHAR(200)   NOT NULL,
     PassHash            VARCHAR(MAX)    NOT NULL,
+	GradeID				INT				NULL,
     AvatarUrl           NVARCHAR(1000)  NULL,
     Email               NVARCHAR(200)   NOT NULL UNIQUE,
     PhoneNumber         NVARCHAR(50)    NULL,
     BirthDate           DATE            NULL,
     Gender              NVARCHAR(10)    NULL,
     Address             NVARCHAR(500)   NULL,
-    RegisteredAt        DATETIME        NOT NULL DEFAULT GETDATE()
+    RegisteredAt        DATETIME        NOT NULL DEFAULT GETDATE(),
+	FOREIGN KEY(GradeID) REFERENCES dbo.GradeLevel(GradeID)
+		ON UPDATE CASCADE ON DELETE CASCADE
 );
 GO
 
--- Cart table (formerly GioHang)
-CREATE TABLE dbo.Cart (
-    CartID              NVARCHAR(30)    NOT NULL PRIMARY KEY,  -- e.g. Cart_Student001
-    StudentID           NVARCHAR(20)    NOT NULL,
+-- Notification table
+CREATE TABLE dbo.Notification (
+    NotificationID      INT IDENTITY(1,1) NOT NULL,
+    StudentID           VARCHAR(20)		NOT NULL,
+    Title               NVARCHAR(200)   NOT NULL,
+    Body				NVARCHAR(200)	NOT NULL,
+	IsRead				BIT				NOT NULL DEFAULT 0,
     CreatedAt           DATETIME        NOT NULL DEFAULT GETDATE(),
-    CONSTRAINT FK_Cart_Student
-        FOREIGN KEY(StudentID) REFERENCES dbo.Student(StudentID)
+	PRIMARY KEY (StudentID, NotificationID),
+    FOREIGN KEY(StudentID) REFERENCES dbo.Student(StudentID)
+      ON UPDATE CASCADE ON DELETE CASCADE
+);
+GO
+
+-- CourseProgress table
+CREATE TABLE dbo.CourseProgress (
+    StudentID           VARCHAR(20)		NOT NULL,
+    LessonID            VARCHAR(30)		NOT NULL,
+    Progress            TINYINT			NOT NULL DEFAULT(0),
+    CompleteddAt        DATETIME        NOT NULL DEFAULT GETDATE(),
+	PRIMARY KEY (StudentID, LessonID),
+	FOREIGN KEY(StudentID) REFERENCES dbo.Student(StudentID)
+		ON UPDATE NO ACTION ON DELETE NO ACTION,
+	FOREIGN KEY(LessonID) REFERENCES dbo.Lesson(LessonID)
+		ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+GO
+
+-- Cart table
+CREATE TABLE dbo.Cart (
+    CartID              VARCHAR(30)    NOT NULL PRIMARY KEY,
+    StudentID           VARCHAR(20)    NOT NULL,
+    CreatedAt           DATETIME        NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY(StudentID) REFERENCES dbo.Student(StudentID)
         ON UPDATE CASCADE ON DELETE CASCADE
 );
 GO
 
--- CartDetail table (formerly ChiTietGioHang)
+-- CartDetail table
 CREATE TABLE dbo.CartDetail (
-    CartID              NVARCHAR(30)    NOT NULL,
-    CourseID            NVARCHAR(20)    NOT NULL,
-    AddedAt             DATETIME        NOT NULL DEFAULT GETDATE(),
+    CartID              VARCHAR(30)    NOT NULL,
+    CourseID            VARCHAR(20)    NOT NULL,
     PRIMARY KEY (CartID, CourseID),
     FOREIGN KEY(CartID) REFERENCES dbo.Cart(CartID)
-        ON DELETE CASCADE ON UPDATE CASCADE,
+        ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY(CourseID) REFERENCES dbo.Course(CourseID)
-        ON DELETE CASCADE ON UPDATE CASCADE
+        ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 GO
 
--- CourseStudent join table (formerly KhoaHoc_HocSinh)
+--  Order table
+CREATE TABLE dbo.OrderHistory (
+	OrderID             VARCHAR(30)    NOT NULL PRIMARY KEY,
+    CartID              VARCHAR(30)    NOT NULL,
+    CourseID            VARCHAR(20)    NOT NULL,
+	CreateAt			DATETIME		DEFAULT(GETDATE()),	
+	FOREIGN KEY(CartID, CourseID) REFERENCES dbo.CartDetail(CartID, CourseID)
+        ON DELETE NO ACTION ON UPDATE CASCADE,
+)
+GO
+
+-- CourseStudent join table
 CREATE TABLE dbo.CourseStudent (
-    CourseID            NVARCHAR(20)    NOT NULL,
-    StudentID           NVARCHAR(20)    NOT NULL,
+    CourseID            VARCHAR(20)    NOT NULL,
+    StudentID           VARCHAR(20)    NOT NULL,
     EnrolledAt          DATETIME        NOT NULL DEFAULT GETDATE(),
     PRIMARY KEY (CourseID, StudentID),
-    CONSTRAINT FK_CourseStudent_Course
-        FOREIGN KEY(CourseID) REFERENCES dbo.Course(CourseID)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT FK_CourseStudent_Student
-        FOREIGN KEY(StudentID) REFERENCES dbo.Student(StudentID)
-        ON UPDATE CASCADE ON DELETE CASCADE
+     FOREIGN KEY(CourseID) REFERENCES dbo.Course(CourseID)
+        ON UPDATE NO ACTION ON DELETE CASCADE,
+     FOREIGN KEY(StudentID) REFERENCES dbo.Student(StudentID)
+        ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 GO
 
 -- Admin table
 CREATE TABLE dbo.Admin (
-    AdminID             NVARCHAR(20)    NOT NULL PRIMARY KEY,
+    AdminID             VARCHAR(20)    NOT NULL PRIMARY KEY,
     FullName            NVARCHAR(200)   NOT NULL,
     PassHash            VARCHAR(MAX)    NOT NULL,
     AvatarUrl           NVARCHAR(1000)  NULL,
@@ -137,6 +191,7 @@ CREATE TABLE dbo.Admin (
     PhoneNumber         NVARCHAR(50)    NULL
 );
 GO
+
 
 -- Trigger for Teacher auto-ID (formerly trg_GiaoVien_InsteadOfInsert)
 CREATE TRIGGER trg_Teacher_InsteadOfInsert
