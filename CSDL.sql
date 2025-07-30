@@ -181,6 +181,43 @@ CREATE TABLE dbo.CourseStudent (
 );
 GO
 
+-- Person view	
+CREATE VIEW dbo.View_Person AS
+SELECT 
+    StudentID AS PersonID,
+    'STUDENT' AS PersonType,
+    FullName,
+    Email,
+    AvatarUrl
+FROM dbo.Student
+UNION
+SELECT 
+    TeacherID,
+    'TEACHER',
+    FullName,
+    Email,
+    AvatarUrl
+FROM dbo.Teacher;
+GO
+
+-- LessonComment table
+CREATE TABLE dbo.LessonComment (
+    CommentID       VARCHAR(30)     NOT NULL PRIMARY KEY,
+    LessonID        VARCHAR(30)     NOT NULL,
+    PersonID        VARCHAR(20)     NOT NULL,
+    PersonType      VARCHAR(10)     NOT NULL CHECK (PersonType IN ('STUDENT', 'TEACHER')),
+    ParentID        VARCHAR(30)     NULL,
+    Content         NVARCHAR(MAX)   NOT NULL,
+    CreatedAt       DATETIME        NOT NULL DEFAULT GETDATE(),
+
+    FOREIGN KEY (LessonID) REFERENCES dbo.Lesson(LessonID)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (ParentID) REFERENCES dbo.LessonComment(CommentID)
+        ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+GO
+
+
 -- Admin table
 CREATE TABLE dbo.Admin (
     AdminID             VARCHAR(20)    NOT NULL PRIMARY KEY,
