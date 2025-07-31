@@ -56,8 +56,8 @@ GO
 
 -- CourseGoal table
 CREATE TABLE dbo.CourseGoal (
-    CourseID            VARCHAR(20)    NOT NULL,
-    GoalOrder           INT             NOT NULL,
+    CourseID            VARCHAR(20)		NOT NULL,
+    GoalOrder           INT IDENTITY(1,1) NOT NULL,
     Content             NVARCHAR(1000)  NOT NULL,
     PRIMARY KEY (CourseID, GoalOrder),
     FOREIGN KEY (CourseID) REFERENCES dbo.Course(CourseID)
@@ -68,7 +68,7 @@ GO
 -- CourseRequirement table
 CREATE TABLE dbo.CourseRequirement (
     CourseID            VARCHAR(20)    NOT NULL,
-    RequirementOrder    INT             NOT NULL,
+    RequirementOrder    INT IDENTITY(1,1) NOT NULL,
     Content             NVARCHAR(1000)  NOT NULL,
     PRIMARY KEY (CourseID, RequirementOrder),
     FOREIGN KEY (CourseID) REFERENCES dbo.Course(CourseID)
@@ -209,7 +209,6 @@ CREATE TABLE dbo.LessonComment (
     ParentID        VARCHAR(30)     NULL,
     Content         NVARCHAR(MAX)   NOT NULL,
     CreatedAt       DATETIME        NOT NULL DEFAULT GETDATE(),
-
     FOREIGN KEY (LessonID) REFERENCES dbo.Lesson(LessonID)
         ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (ParentID) REFERENCES dbo.LessonComment(CommentID)
@@ -305,10 +304,10 @@ BEGIN
     );
 
     INSERT INTO dbo.Course
-      (CourseID, Subject, Title, ImageUrl, Description, Price, DurationDays, TeacherID, UpdatedAt)
+      (CourseID, SubjectID, Title, ImageUrl, Description, Price, DurationDays, TeacherID, UpdatedAt)
     SELECT
       COALESCE(i.CourseID, 'Course' + RIGHT(CAST(@baseMax + ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS VARCHAR(3)),3)),
-      i.Subject, i.Title, i.ImageUrl, i.Description, i.Price, i.DurationDays, i.TeacherID, GETDATE()
+      i.SubjectID, i.Title, i.ImageUrl, i.Description, i.Price, i.DurationDays, i.TeacherID, GETDATE()
     FROM inserted AS i;
 END;
 GO
@@ -328,6 +327,73 @@ BEGIN
     FROM inserted AS i;
 END;
 GO
+
+CREATE TRIGGER trg_LessonComment_InsteadOfInsert
+ON dbo.LessonComment
+INSTEAD OF INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @MaxID INT;
+    SELECT @MaxID = MAX(CAST(SUBSTRING(CommentID, 8, LEN(CommentID)-7) AS INT))
+    FROM dbo.LessonComment
+    WHERE ISNUMERIC(SUBSTRING(CommentID, 8, LEN(CommentID)-7)) = 1;
+
+    SET @MaxID = ISNULL(@MaxID, 0);
+
+    INSERT INTO dbo.LessonComment (CommentID, LessonID, PersonID, PersonType, ParentID, Content, CreatedAt)
+    SELECT 
+        COALESCE(i.CommentID, 'Comment' + RIGHT('000000' + CAST(@MaxID + ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS VARCHAR),6)),
+        i.LessonID, i.PersonID, i.PersonType, i.ParentID, i.Content, GETDATE()
+    FROM inserted i;
+END;
+GO
+
+CREATE TRIGGER trg_OrderHistory_InsteadOfInsert
+ON dbo.OrderHistory
+INSTEAD OF INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @MaxID INT;
+    SELECT @MaxID = MAX(CAST(SUBSTRING(OrderID, 6, LEN(OrderID)-5) AS INT))
+    FROM dbo.OrderHistory
+    WHERE ISNUMERIC(SUBSTRING(OrderID, 6, LEN(OrderID)-5)) = 1;
+
+    SET @MaxID = ISNULL(@MaxID, 0);
+
+    INSERT INTO dbo.OrderHistory (OrderID, CartID, CourseID, CreateAt)
+    SELECT
+        COALESCE(i.OrderID, 'Order' + RIGHT('000000' + CAST(@MaxID + ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS VARCHAR),6)),
+        i.CartID, i.CourseID, GETDATE()
+    FROM inserted i;
+END;
+GO
+
+CREATE TRIGGER trg_Cart_InsteadOfInsert
+ON dbo.Cart
+INSTEAD OF INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @MaxID INT;
+    SELECT @MaxID = MAX(CAST(SUBSTRING(CartID, 5, LEN(CartID)-4) AS INT))
+    FROM dbo.Cart
+    WHERE ISNUMERIC(SUBSTRING(CartID, 5, LEN(CartID)-4)) = 1;
+
+    SET @MaxID = ISNULL(@MaxID, 0);
+
+    INSERT INTO dbo.Cart (CartID, StudentID, CreatedAt)
+    SELECT 
+        COALESCE(i.CartID, 'Cart' + RIGHT('000' + CAST(@MaxID + ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS VARCHAR),3)),
+        i.StudentID, GETDATE()
+    FROM inserted i;
+END;
+GO
+
 
 
 ----- INSERT GIAOVIEN
