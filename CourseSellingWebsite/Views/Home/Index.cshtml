@@ -1,8 +1,497 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTHPT - Nền tảng học trực tuyến cho học sinh THPT</title>
+    <link rel="stylesheet" href="~/css/welcome.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Hero Section with Slides -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+        <!-- Sliding backgrounds -->
+        <div class="hero-backgrounds">
+            <div class="hero-bg active" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')"></div>
+            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')"></div>
+            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="container">
+                <div class="hero-grid">
+                    <!-- Left Content Box -->
+                    <div class="hero-left">
+                        <div class="content-box">
+                            <div class="slide-content active" data-slide="0">
+                                <h1 class="hero-title">Khóa học chất lượng cao</h1>
+                                <h2 class="hero-subtitle">Chuẩn theo chương trình THPT</h2>
+                                <p class="hero-description">Nội dung được biên soạn bởi đội ngũ giáo viên kinh nghiệm, đảm bảo chất lượng và hiệu quả học tập cao nhất</p>
+                            </div>
+                            <div class="slide-content" data-slide="1">
+                                <h1 class="hero-title">Giáo viên uy tín</h1>
+                                <h2 class="hero-subtitle">Hỗ trợ sát sao từng học sinh</h2>
+                                <p class="hero-description">Đội ngũ giáo viên có nhiều năm kinh nghiệm giảng dạy, luôn sẵn sàng hỗ trợ và giải đáp thắc mắc của học sinh</p>
+                            </div>
+                            <div class="slide-content" data-slide="2">
+                                <h1 class="hero-title">Học tập linh hoạt</h1>
+                                <h2 class="hero-subtitle">Mọi lúc, mọi nơi</h2>
+                                <p class="hero-description">Học online với thời gian linh hoạt, phù hợp với lịch học tại trường và các hoạt động cá nhân</p>
+                            </div>
+                            <div class="hero-buttons">
+                                <button class="btn btn-primary">
+                                    Khám phá ngay
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-play"></i>
+                                    Xem demo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Image Box -->
+                    <div class="hero-right">
+                        <div class="image-box">
+                            <div class="hero-images">
+                                <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Course preview" class="hero-image active">
+                                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Course preview" class="hero-image">
+                                <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Course preview" class="hero-image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide Indicators -->
+        <div class="slide-indicators">
+            <div class="indicator active" data-slide="0"></div>
+            <div class="indicator" data-slide="1"></div>
+            <div class="indicator" data-slide="2"></div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Tính năng nổi bật</h2>
+                <p class="section-description">Khám phá những tính năng độc đáo giúp bạn học tập hiệu quả hơn</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3 class="feature-title">Kho bài giảng phong phú</h3>
+                    <p class="feature-description">Hàng nghìn bài giảng video chất lượng cao, được cập nhật liên tục theo chương trình mới nhất</p>
+                </div>
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="feature-title">Cộng đồng học tập</h3>
+                    <p class="feature-description">Tham gia cộng đồng học sinh năng động, cùng nhau thảo luận và giải đáp thắc mắc</p>
+                </div>
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3 class="feature-title">Chứng chỉ hoàn thành</h3>
+                    <p class="feature-description">Nhận chứng chỉ sau khi hoàn thành khóa học, tăng thêm giá trị cho hồ sơ học tập</p>
+                </div>
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="feature-title">Học theo tiến độ cá nhân</h3>
+                    <p class="feature-description">Tự do sắp xếp thời gian học tập phù hợp với lịch trình và khả năng tiếp thu của bản thân</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">10,000+</div>
+                    <div class="stat-label">Học sinh đã tham gia</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Bài giảng chất lượng</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Giáo viên kinh nghiệm</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Tỷ lệ hài lòng</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Courses Section -->
+    <section class="courses-section" id="courses">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Khóa học phổ biến</h2>
+                <p class="section-description">Những khóa học được yêu thích nhất bởi các em học sinh THPT</p>
+            </div>
+
+            <div class="courses-grid">
+                <div class="course-card animate-on-scroll">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Toán học THPT">
+                        <div class="course-price">299,000đ</div>
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">Toán học THPT</h3>
+                        <p class="course-description">Từ cơ bản đến nâng cao, chuẩn bị tốt cho kỳ thi THPT</p>
+                        <div class="course-meta">
+                            <span class="course-students">2,500 học sinh</span>
+                            <div class="course-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-full">Tham gia ngay</button>
+                    </div>
+                </div>
+                <div class="course-card animate-on-scroll">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Vật lý THPT">
+                        <div class="course-price">279,000đ</div>
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">Vật lý THPT</h3>
+                        <p class="course-description">Hiểu rõ bản chất, giải bài tập một cách logic</p>
+                        <div class="course-meta">
+                            <span class="course-students">1,800 học sinh</span>
+                            <div class="course-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.8</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-full">Tham gia ngay</button>
+                    </div>
+                </div>
+                <div class="course-card animate-on-scroll">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Hóa học THPT">
+                        <div class="course-price">259,000đ</div>
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">Hóa học THPT</h3>
+                        <p class="course-description">Phương trình hóa học, bài tập tính toán dễ dàng</p>
+                        <div class="course-meta">
+                            <span class="course-students">1,600 học sinh</span>
+                            <div class="course-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.7</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-full">Tham gia ngay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-choose-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Tại sao chọn chúng tôi?</h2>
+                <p class="section-description">Những lý do khiến hàng nghìn học sinh tin tưởng lựa chọn</p>
+            </div>
+
+            <div class="why-choose-grid">
+                <div class="why-choose-card animate-on-scroll">
+                    <div class="why-choose-icon">🎯</div>
+                    <h3 class="why-choose-title">Phương pháp học hiệu quả</h3>
+                    <p class="why-choose-description">Áp dụng các phương pháp giảng dạy hiện đại, phù hợp với từng đối tượng học sinh</p>
+                </div>
+                <div class="why-choose-card animate-on-scroll">
+                    <div class="why-choose-icon">⏰</div>
+                    <h3 class="why-choose-title">Tiết kiệm thời gian</h3>
+                    <p class="why-choose-description">Học mọi lúc mọi nơi, không bị ràng buộc về thời gian và địa điểm</p>
+                </div>
+                <div class="why-choose-card animate-on-scroll">
+                    <div class="why-choose-icon">💰</div>
+                    <h3 class="why-choose-title">Chi phí hợp lý</h3>
+                    <p class="why-choose-description">Giá cả phải chăng, tiết kiệm hơn so với gia sư truyền thống</p>
+                </div>
+                <div class="why-choose-card animate-on-scroll">
+                    <div class="why-choose-icon">📱</div>
+                    <h3 class="why-choose-title">Công nghệ hiện đại</h3>
+                    <p class="why-choose-description">Nền tảng học tập trực tuyến với giao diện thân thiện, dễ sử dụng</p>
+                </div>
+                <div class="why-choose-card animate-on-scroll">
+                    <div class="why-choose-icon">🏆</div>
+                    <h3 class="why-choose-title">Đội ngũ chất lượng</h3>
+                    <p class="why-choose-description">Giáo viên có nhiều năm kinh nghiệm, tận tâm với nghề</p>
+                </div>
+                <div class="why-choose-card animate-on-scroll">
+                    <div class="why-choose-icon">📊</div>
+                    <h3 class="why-choose-title">Theo dõi tiến độ</h3>
+                    <p class="why-choose-description">Hệ thống báo cáo chi tiết giúp theo dõi quá trình học tập</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learning Process Section -->
+    <section class="process-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Quy trình học tập</h2>
+                <p class="section-description">4 bước đơn giản để bắt đầu hành trình học tập cùng chúng tôi</p>
+            </div>
+
+            <div class="process-grid">
+                <div class="process-step animate-on-scroll">
+                    <div class="process-number">01</div>
+                    <h3 class="process-title">Đăng ký tài khoản</h3>
+                    <p class="process-description">Tạo tài khoản miễn phí và khám phá các khóa học</p>
+                    <div class="process-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+                <div class="process-step animate-on-scroll">
+                    <div class="process-number">02</div>
+                    <h3 class="process-title">Chọn khóa học</h3>
+                    <p class="process-description">Lựa chọn khóa học phù hợp với nhu cầu và trình độ</p>
+                    <div class="process-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+                <div class="process-step animate-on-scroll">
+                    <div class="process-number">03</div>
+                    <h3 class="process-title">Bắt đầu học</h3>
+                    <p class="process-description">Theo dõi bài giảng và thực hành với các bài tập</p>
+                    <div class="process-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+                <div class="process-step animate-on-scroll">
+                    <div class="process-number">04</div>
+                    <h3 class="process-title">Đạt kết quả</h3>
+                    <p class="process-description">Hoàn thành khóa học và nhận chứng chỉ</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teachers Section -->
+    <section class="teachers-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Đội ngũ giáo viên</h2>
+                <p class="section-description">Gặp gỡ những giáo viên tài năng và tận tâm của chúng tôi</p>
+            </div>
+
+            <div class="teachers-grid">
+                <div class="teacher-card animate-on-scroll">
+                    <div class="teacher-image">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Thầy Nguyễn Văn A">
+                    </div>
+                    <h3 class="teacher-name">Thầy Nguyễn Văn A</h3>
+                    <p class="teacher-subject">Giáo viên Toán học</p>
+                    <p class="teacher-experience">15 năm kinh nghiệm</p>
+                    <p class="teacher-description">Thạc sĩ Toán học, chuyên gia luyện thi THPT Quốc gia</p>
+                </div>
+                <div class="teacher-card animate-on-scroll">
+                    <div class="teacher-image">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616c9c0e8e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Cô Trần Thị B">
+                    </div>
+                    <h3 class="teacher-name">Cô Trần Thị B</h3>
+                    <p class="teacher-subject">Giáo viên Vật lý</p>
+                    <p class="teacher-experience">12 năm kinh nghiệm</p>
+                    <p class="teacher-description">Tiến sĩ Vật lý, nhiều năm giảng dạy tại các trường THPT</p>
+                </div>
+                <div class="teacher-card animate-on-scroll">
+                    <div class="teacher-image">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Thầy Lê Văn C">
+                    </div>
+                    <h3 class="teacher-name">Thầy Lê Văn C</h3>
+                    <p class="teacher-subject">Giáo viên Hóa học</p>
+                    <p class="teacher-experience">10 năm kinh nghiệm</p>
+                    <p class="teacher-description">Thạc sĩ Hóa học, chuyên môn sâu về hóa hữu cơ</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section" id="benefits">
+        <div class="container">
+            <div class="benefits-grid">
+                <div class="benefits-content">
+                    <h2 class="section-title">Lợi ích mang lại cho học sinh</h2>
+                    <p class="section-description">Tham gia khóa học của chúng tôi để trải nghiệm những lợi ích tuyệt vời</p>
+
+                    <div class="benefits-list">
+                        <div class="benefit-item animate-on-scroll">
+                            <i class="fas fa-check-circle"></i>
+                            <p>Nâng cao điểm số các môn học một cách đáng kể</p>
+                        </div>
+                        <div class="benefit-item animate-on-scroll">
+                            <i class="fas fa-check-circle"></i>
+                            <p>Chuẩn bị tốt nhất cho kỳ thi THPT Quốc gia</p>
+                        </div>
+                        <div class="benefit-item animate-on-scroll">
+                            <i class="fas fa-check-circle"></i>
+                            <p>Phát triển tư duy logic và khả năng giải quyết vấn đề</p>
+                        </div>
+                        <div class="benefit-item animate-on-scroll">
+                            <i class="fas fa-check-circle"></i>
+                            <p>Tiết kiệm thời gian và chi phí so với gia sư truyền thống</p>
+                        </div>
+                        <div class="benefit-item animate-on-scroll">
+                            <i class="fas fa-check-circle"></i>
+                            <p>Tiếp cận phương pháp học tập hiện đại và hiệu quả</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="benefits-image">
+                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Student success">
+                    <div class="success-badge">
+                        <div class="success-number">98%</div>
+                        <div class="success-text">Học sinh hài lòng</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section" id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Cảm nhận từ học sinh</h2>
+                <p class="section-description">Nghe những chia sẻ chân thật từ các em học sinh</p>
+            </div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card animate-on-scroll">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-content">"Nhờ các khóa học trên website, em đã cải thiện điểm Toán từ 6.5 lên 8.5 chỉ trong 3 tháng. Các bài giảng rất dễ hiểu và thực tế."</p>
+                    <div class="testimonial-author">
+                        <div class="author-name">Nguyễn Minh Anh</div>
+                        <div class="author-grade">Lớp 12A1</div>
+                    </div>
+                </div>
+                <div class="testimonial-card animate-on-scroll">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-content">"Thầy cô giảng dạy rất tận tình, luôn sẵn sàng giải đáp thắc mắc. Em cảm thấy tự tin hơn rất nhiều trong việc học tập."</p>
+                    <div class="testimonial-author">
+                        <div class="author-name">Trần Văn Hùng</div>
+                        <div class="author-grade">Lớp 11A3</div>
+                    </div>
+                </div>
+                <div class="testimonial-card animate-on-scroll">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-content">"Website thiết kế rất đẹp và dễ sử dụng. Em có thể học mọi lúc mọi nơi, rất tiện lợi cho việc ôn tập."</p>
+                    <div class="testimonial-author">
+                        <div class="author-name">Lê Thị Mai</div>
+                        <div class="author-grade">Lớp 12A2</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Sẵn sàng bắt đầu hành trình học tập?</h2>
+                <p class="cta-description">Tham gia cùng hàng nghìn học sinh đã tin tưởng và đạt được thành công với chúng tôi</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-white">
+                        Đăng ký ngay
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn btn-outline-white">Đăng nhập</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3 class="footer-title">EduTHPT</h3>
+                    <p class="footer-description">Nền tảng học trực tuyến hàng đầu dành cho học sinh THPT tại Việt Nam</p>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-heading">Khóa học</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Toán học</a></li>
+                        <li><a href="#">Vật lý</a></li>
+                        <li><a href="#">Hóa học</a></li>
+                        <li><a href="#">Sinh học</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-heading">Hỗ trợ</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Trung tâm trợ giúp</a></li>
+                        <li><a href="#">Liên hệ</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Chính sách</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-heading">Kết nối</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">YouTube</a></li>
+                        <li><a href="#">Zalo</a></li>
+                        <li><a href="#">Email</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 EduTHPT. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/js/welcome.js"></script>
+</body>
+</html>
