@@ -57,11 +57,11 @@ public partial class AppDbContext : DbContext
     {
         modelBuilder.Entity<Admin>(entity =>
         {
-            entity.HasKey(e => e.AdminId).HasName("PK__Admin__719FE4E8B77A0B2C");
+            entity.HasKey(e => e.AdminId).HasName("PK__Admin__719FE4E8A4B55422");
 
             entity.ToTable("Admin");
 
-            entity.HasIndex(e => e.Email, "UQ__Admin__A9D1053491D719B7").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Admin__A9D10534FD9D696E").IsUnique();
 
             entity.Property(e => e.AdminId)
                 .HasMaxLength(20)
@@ -76,7 +76,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity.HasKey(e => e.CartId).HasName("PK__Cart__51BCD7978C255A70");
+            entity.HasKey(e => e.CartId).HasName("PK__Cart__51BCD797BD419871");
 
             entity.ToTable("Cart", tb => tb.HasTrigger("trg_Cart_InsteadOfInsert"));
 
@@ -94,12 +94,12 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Student).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.StudentId)
-                .HasConstraintName("FK__Cart__StudentID__6383C8BA");
+                .HasConstraintName("FK__Cart__StudentID__628FA481");
         });
 
         modelBuilder.Entity<CartDetail>(entity =>
         {
-            entity.HasKey(e => new { e.CartId, e.CourseId }).HasName("PK__CartDeta__3D2E008FE3449146");
+            entity.HasKey(e => new { e.CartId, e.CourseId }).HasName("PK__CartDeta__3D2E008FC3BD229C");
 
             entity.ToTable("CartDetail");
 
@@ -114,18 +114,17 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Cart).WithMany(p => p.CartDetails)
                 .HasForeignKey(d => d.CartId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CartDetai__CartI__66603565");
+                .HasConstraintName("FK__CartDetai__CartI__656C112C");
 
             entity.HasOne(d => d.Course).WithMany(p => p.CartDetails)
                 .HasForeignKey(d => d.CourseId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CartDetai__Cours__6754599E");
+                .HasConstraintName("FK__CartDetai__Cours__66603565");
         });
 
         modelBuilder.Entity<Course>(entity =>
         {
-            entity.HasKey(e => e.CourseId).HasName("PK__Course__C92D7187A9320E30");
+            entity.HasKey(e => e.CourseId).HasName("PK__Course__C92D7187EC3A061E");
 
             entity.ToTable("Course", tb => tb.HasTrigger("trg_Course_InsteadOfInsert"));
 
@@ -138,10 +137,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.GradeId).HasColumnName("GradeID");
             entity.Property(e => e.ImageUrl).HasMaxLength(1000);
             entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.SubjectId)
-                .HasMaxLength(30)
-                .IsUnicode(false)
-                .HasColumnName("SubjectID");
             entity.Property(e => e.TeacherId)
                 .HasMaxLength(20)
                 .IsUnicode(false)
@@ -153,12 +148,7 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Grade).WithMany(p => p.Courses)
                 .HasForeignKey(d => d.GradeId)
-                .HasConstraintName("FK__Course__GradeID__46E78A0C");
-
-            entity.HasOne(d => d.Subject).WithMany(p => p.Courses)
-                .HasForeignKey(d => d.SubjectId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Course__SubjectI__45F365D3");
+                .HasConstraintName("FK__Course__GradeID__45F365D3");
 
             entity.HasOne(d => d.Teacher).WithMany(p => p.Courses)
                 .HasForeignKey(d => d.TeacherId)
@@ -167,7 +157,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<CourseGoal>(entity =>
         {
-            entity.HasKey(e => new { e.CourseId, e.GoalOrder }).HasName("PK__CourseGo__8031A6B6FA9417AB");
+            entity.HasKey(e => new { e.CourseId, e.GoalOrder }).HasName("PK__CourseGo__8031A6B63DE8AAC3");
 
             entity.ToTable("CourseGoal");
 
@@ -180,12 +170,12 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Course).WithMany(p => p.CourseGoals)
                 .HasForeignKey(d => d.CourseId)
-                .HasConstraintName("FK__CourseGoa__Cours__49C3F6B7");
+                .HasConstraintName("FK__CourseGoa__Cours__48CFD27E");
         });
 
         modelBuilder.Entity<CourseProgress>(entity =>
         {
-            entity.HasKey(e => new { e.StudentId, e.LessonId }).HasName("PK__CoursePr__29CD60B25D57FD22");
+            entity.HasKey(e => new { e.StudentId, e.LessonId }).HasName("PK__CoursePr__29CD60B2175D51B8");
 
             entity.ToTable("CourseProgress");
 
@@ -204,17 +194,16 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.Lesson).WithMany(p => p.CourseProgresses)
                 .HasForeignKey(d => d.LessonId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CoursePro__Lesso__5FB337D6");
+                .HasConstraintName("FK__CoursePro__Lesso__5EBF139D");
 
             entity.HasOne(d => d.Student).WithMany(p => p.CourseProgresses)
                 .HasForeignKey(d => d.StudentId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CoursePro__Stude__5EBF139D");
+                .HasConstraintName("FK__CoursePro__Stude__5DCAEF64");
         });
 
         modelBuilder.Entity<CourseRequirement>(entity =>
         {
-            entity.HasKey(e => new { e.CourseId, e.RequirementOrder }).HasName("PK__CourseRe__7D70E0DCD4FE2E1B");
+            entity.HasKey(e => new { e.CourseId, e.RequirementOrder }).HasName("PK__CourseRe__7D70E0DC42A0F086");
 
             entity.ToTable("CourseRequirement");
 
@@ -227,12 +216,12 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Course).WithMany(p => p.CourseRequirements)
                 .HasForeignKey(d => d.CourseId)
-                .HasConstraintName("FK__CourseReq__Cours__4CA06362");
+                .HasConstraintName("FK__CourseReq__Cours__4BAC3F29");
         });
 
         modelBuilder.Entity<CourseStudent>(entity =>
         {
-            entity.HasKey(e => new { e.CourseId, e.StudentId }).HasName("PK__CourseSt__4A012320F34F6BC1");
+            entity.HasKey(e => new { e.CourseId, e.StudentId }).HasName("PK__CourseSt__4A012320B291A929");
 
             entity.ToTable("CourseStudent");
 
@@ -250,21 +239,21 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Course).WithMany(p => p.CourseStudents)
                 .HasForeignKey(d => d.CourseId)
-                .HasConstraintName("FK__CourseStu__Cours__6EF57B66");
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__CourseStu__Cours__6E01572D");
 
             entity.HasOne(d => d.Student).WithMany(p => p.CourseStudents)
                 .HasForeignKey(d => d.StudentId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CourseStu__Stude__6FE99F9F");
+                .HasConstraintName("FK__CourseStu__Stude__6EF57B66");
         });
 
         modelBuilder.Entity<GradeLevel>(entity =>
         {
-            entity.HasKey(e => e.GradeId).HasName("PK__GradeLev__54F87A37FD2C6E9E");
+            entity.HasKey(e => e.GradeId).HasName("PK__GradeLev__54F87A37A5AC2834");
 
             entity.ToTable("GradeLevel");
 
-            entity.HasIndex(e => e.Name, "UQ__GradeLev__737584F6637BF1E6").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__GradeLev__737584F6745C879D").IsUnique();
 
             entity.Property(e => e.GradeId).HasColumnName("GradeID");
             entity.Property(e => e.Name).HasMaxLength(100);
@@ -272,9 +261,13 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Lesson>(entity =>
         {
-            entity.HasKey(e => e.LessonId).HasName("PK__Lesson__B084ACB050E377D7");
+            entity.HasKey(e => e.LessonId).HasName("PK__Lesson__B084ACB0DD14302A");
 
-            entity.ToTable("Lesson", tb => tb.HasTrigger("trg_Lesson_InsteadOfInsert"));
+            entity.ToTable("Lesson", tb =>
+                {
+                    tb.HasTrigger("TR_DeleteLesson_CascadeCourseProgress");
+                    tb.HasTrigger("trg_Lesson_InsteadOfInsert");
+                });
 
             entity.Property(e => e.LessonId)
                 .HasMaxLength(30)
@@ -292,12 +285,12 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Course).WithMany(p => p.Lessons)
                 .HasForeignKey(d => d.CourseId)
-                .HasConstraintName("FK__Lesson__CourseID__5070F446");
+                .HasConstraintName("FK__Lesson__CourseID__4F7CD00D");
         });
 
         modelBuilder.Entity<LessonComment>(entity =>
         {
-            entity.HasKey(e => e.CommentId).HasName("PK__LessonCo__C3B4DFAA2A42CA8B");
+            entity.HasKey(e => e.CommentId).HasName("PK__LessonCo__C3B4DFAA3BFD82B8");
 
             entity.ToTable("LessonComment", tb => tb.HasTrigger("trg_LessonComment_InsteadOfInsert"));
 
@@ -326,16 +319,17 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Lesson).WithMany(p => p.LessonComments)
                 .HasForeignKey(d => d.LessonId)
-                .HasConstraintName("FK__LessonCom__Lesso__75A278F5");
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__LessonCom__Lesso__74AE54BC");
 
             entity.HasOne(d => d.Parent).WithMany(p => p.InverseParent)
                 .HasForeignKey(d => d.ParentId)
-                .HasConstraintName("FK__LessonCom__Paren__76969D2E");
+                .HasConstraintName("FK__LessonCom__Paren__75A278F5");
         });
 
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => new { e.StudentId, e.NotificationId }).HasName("PK__Notifica__00C9D89AA3EA4DDC");
+            entity.HasKey(e => new { e.StudentId, e.NotificationId }).HasName("PK__Notifica__00C9D89A51EC74B9");
 
             entity.ToTable("Notification");
 
@@ -354,12 +348,12 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Student).WithMany(p => p.Notifications)
                 .HasForeignKey(d => d.StudentId)
-                .HasConstraintName("FK__Notificat__Stude__59FA5E80");
+                .HasConstraintName("FK__Notificat__Stude__59063A47");
         });
 
         modelBuilder.Entity<OrderHistory>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__OrderHis__C3905BAF3EB40E9D");
+            entity.HasKey(e => e.OrderId).HasName("PK__OrderHis__C3905BAF2E2D7792");
 
             entity.ToTable("OrderHistory", tb => tb.HasTrigger("trg_OrderHistory_InsteadOfInsert"));
 
@@ -381,17 +375,16 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.CartDetail).WithMany(p => p.OrderHistories)
                 .HasForeignKey(d => new { d.CartId, d.CourseId })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__OrderHistory__6B24EA82");
+                .HasConstraintName("FK__OrderHistory__6A30C649");
         });
 
         modelBuilder.Entity<Student>(entity =>
         {
-            entity.HasKey(e => e.StudentId).HasName("PK__Student__32C52A79CD5A48AE");
+            entity.HasKey(e => e.StudentId).HasName("PK__Student__32C52A79D966B53B");
 
             entity.ToTable("Student", tb => tb.HasTrigger("trg_Student_InsteadOfInsert"));
 
-            entity.HasIndex(e => e.Email, "UQ__Student__A9D105349B213FE3").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Student__A9D1053443E37B6E").IsUnique();
 
             entity.Property(e => e.StudentId)
                 .HasMaxLength(20)
@@ -412,16 +405,16 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.Grade).WithMany(p => p.Students)
                 .HasForeignKey(d => d.GradeId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Student__GradeID__5535A963");
+                .HasConstraintName("FK__Student__GradeID__5441852A");
         });
 
         modelBuilder.Entity<Subject>(entity =>
         {
-            entity.HasKey(e => e.SubjectId).HasName("PK__Subject__AC1BA3887A50AB58");
+            entity.HasKey(e => e.SubjectId).HasName("PK__Subject__AC1BA3880261DB1F");
 
             entity.ToTable("Subject");
 
-            entity.HasIndex(e => e.Name, "UQ__Subject__737584F69DAAE5BD").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__Subject__737584F607D394ED").IsUnique();
 
             entity.Property(e => e.SubjectId)
                 .HasMaxLength(30)
@@ -434,11 +427,11 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Teacher>(entity =>
         {
-            entity.HasKey(e => e.TeacherId).HasName("PK__Teacher__EDF2594495136A18");
+            entity.HasKey(e => e.TeacherId).HasName("PK__Teacher__EDF25944D749B30E");
 
             entity.ToTable("Teacher", tb => tb.HasTrigger("trg_Teacher_InsteadOfInsert"));
 
-            entity.HasIndex(e => e.Email, "UQ__Teacher__A9D1053481863E41").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Teacher__A9D105346DCE1017").IsUnique();
 
             entity.Property(e => e.TeacherId)
                 .HasMaxLength(20)

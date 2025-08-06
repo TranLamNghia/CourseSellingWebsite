@@ -41,7 +41,6 @@ GO
 -- Course table
 CREATE TABLE dbo.Course (
     CourseID            VARCHAR(20)		NOT NULL PRIMARY KEY,
-    SubjectID           VARCHAR(30)		NOT NULL,
 	GradeID				INT				NOT NULL,
     Title               NVARCHAR(300)   NOT NULL,
     ImageUrl            NVARCHAR(1000)  NULL,
@@ -53,8 +52,6 @@ CREATE TABLE dbo.Course (
     UpdatedAt           DATETIME        NOT NULL DEFAULT GETDATE(),
     FOREIGN KEY(TeacherID) REFERENCES dbo.Teacher(TeacherID)
 		ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY(SubjectID) REFERENCES dbo.Subject(SubjectID)
-		ON UPDATE NO ACTION ON DELETE NO ACTION,
 	FOREIGN KEY(GradeID) REFERENCES dbo.GradeLevel(GradeID)
 		ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -135,7 +132,7 @@ CREATE TABLE dbo.CourseProgress (
     CompleteddAt        DATETIME        NOT NULL DEFAULT GETDATE(),
 	PRIMARY KEY (StudentID, LessonID),
 	FOREIGN KEY(StudentID) REFERENCES dbo.Student(StudentID)
-		ON UPDATE NO ACTION ON DELETE NO ACTION,
+		ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY(LessonID) REFERENCES dbo.Lesson(LessonID)
 		ON UPDATE NO ACTION ON DELETE NO ACTION
 );
@@ -157,7 +154,7 @@ CREATE TABLE dbo.CartDetail (
     CourseID            VARCHAR(20)    NOT NULL,
     PRIMARY KEY (CartID, CourseID),
     FOREIGN KEY(CartID) REFERENCES dbo.Cart(CartID)
-        ON DELETE NO ACTION ON UPDATE NO ACTION,
+        ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY(CourseID) REFERENCES dbo.Course(CourseID)
         ON DELETE NO ACTION ON UPDATE NO ACTION
 );
@@ -170,7 +167,7 @@ CREATE TABLE dbo.OrderHistory (
     CourseID            VARCHAR(20)    NOT NULL,
 	CreateAt			DATETIME		DEFAULT(GETDATE()),	
 	FOREIGN KEY(CartID, CourseID) REFERENCES dbo.CartDetail(CartID, CourseID)
-        ON DELETE NO ACTION ON UPDATE CASCADE,
+        ON DELETE CASCADE ON UPDATE CASCADE,
 )
 GO
 
@@ -181,9 +178,9 @@ CREATE TABLE dbo.CourseStudent (
     EnrolledAt          DATETIME        NOT NULL DEFAULT GETDATE(),
     PRIMARY KEY (CourseID, StudentID),
      FOREIGN KEY(CourseID) REFERENCES dbo.Course(CourseID)
-        ON UPDATE NO ACTION ON DELETE CASCADE,
+        ON UPDATE NO ACTION ON DELETE NO ACTION,
      FOREIGN KEY(StudentID) REFERENCES dbo.Student(StudentID)
-        ON UPDATE NO ACTION ON DELETE NO ACTION
+        ON UPDATE CASCADE ON DELETE CASCADE
 );
 GO
 
@@ -216,7 +213,7 @@ CREATE TABLE dbo.LessonComment (
     Content         NVARCHAR(MAX)   NOT NULL,
     CreatedAt       DATETIME        NOT NULL DEFAULT GETDATE(),
     FOREIGN KEY (LessonID) REFERENCES dbo.Lesson(LessonID)
-        ON UPDATE CASCADE ON DELETE CASCADE,
+        ON UPDATE NO ACTION ON DELETE NO ACTION,
     FOREIGN KEY (ParentID) REFERENCES dbo.LessonComment(CommentID)
         ON UPDATE NO ACTION ON DELETE NO ACTION
 );
@@ -235,7 +232,7 @@ CREATE TABLE dbo.Admin (
 GO
 
 
--- Trigger Auto ID
+-- TRIGGER INSERT
 CREATE TRIGGER trg_Teacher_InsteadOfInsert
 ON dbo.Teacher
 INSTEAD OF INSERT
@@ -317,10 +314,10 @@ BEGIN
     );
 
     INSERT INTO dbo.Course
-      (CourseID, SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt)
+      (CourseID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt)
     SELECT
       COALESCE(i.CourseID, 'Course' + RIGHT(CAST(@baseMax + ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS VARCHAR(3)),3)),
-      i.SubjectID, i.GradeID, i.Title, i.ImageUrl, i.Description, i.Price, i.DiscountPercent, i.DurationDays, i.TeacherID, GETDATE()
+      i.GradeID, i.Title, i.ImageUrl, i.Description, i.Price, i.DiscountPercent, i.DurationDays, i.TeacherID, GETDATE()
     FROM inserted AS i;
 END;
 GO
@@ -384,7 +381,21 @@ BEGIN
 END;
 GO
 
+-- TRIGGER DELETE
+CREATE TRIGGER TR_DeleteLesson_CascadeCourseProgress
+ON dbo.Lesson
+AFTER DELETE
+AS
+BEGIN
+    DELETE cp
+    FROM dbo.CourseProgress cp
+    INNER JOIN DELETED d ON cp.LessonID = d.LessonID;
 
+	DELETE lc
+    FROM dbo.LessonComment lc
+    INNER JOIN DELETED d ON lc.LessonID = d.LessonID;
+END;
+GO
 
 
 -- Insert 
@@ -438,95 +449,95 @@ INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gende
 VALUES (N'Lý Văn Đạt', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', NULL, 'SUB010', N'Nam', 'lyvanda@example.com', '0990123456', N'Giáo viên Toán học', GETDATE());
 
 -- Insert Course
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB001', 10, N'Toán học lớp 10 - Đại số', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học đại số cơ bản lớp 10', 500000.00, 0.00, 120, 'Teacher1', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(10, N'Toán học lớp 10 - Đại số', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học đại số cơ bản lớp 10', 500000.00, 0.00, 120, 'Teacher1', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB001', 11, N'Toán học lớp 11 - Giải tích', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học giải tích lớp 11', 550000.00, 0.00, 130, 'Teacher1', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(11, N'Toán học lớp 11 - Giải tích', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học giải tích lớp 11', 550000.00, 0.00, 130, 'Teacher1', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB001', 12, N'Toán học lớp 12 - Đề thi', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học luyện đề thi lớp 12', 600000.00, 0.00, 140, 'Teacher1', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(12, N'Toán học lớp 12 - Đề thi', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học luyện đề thi lớp 12', 600000.00, 0.00, 140, 'Teacher1', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB002', 10, N'Vật lý lớp 10 - Cơ học', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học cơ học lớp 10', 450000.00, 0.00, 100, 'Teacher3', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(10, N'Vật lý lớp 10 - Cơ học', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học cơ học lớp 10', 450000.00, 0.00, 100, 'Teacher3', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB002', 11, N'Vật lý lớp 11 - Điện học', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học điện học lớp 11', 500000.00, 0.00, 110, 'Teacher3', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(11, N'Vật lý lớp 11 - Điện học', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học điện học lớp 11', 500000.00, 0.00, 110, 'Teacher3', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB002', 12, N'Vật lý lớp 12 - Lượng tử', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học vật lý lượng tử lớp 12', 550000.00, 0.00, 120, 'Teacher3', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(12, N'Vật lý lớp 12 - Lượng tử', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học vật lý lượng tử lớp 12', 550000.00, 0.00, 120, 'Teacher3', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB003', 10, N'Hóa học lớp 10 - Hóa vô cơ', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học hóa vô cơ lớp 10', 480000.00, 0.00, 110, 'Teacher4', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(10, N'Hóa học lớp 10 - Hóa vô cơ', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học hóa vô cơ lớp 10', 480000.00, 0.00, 110, 'Teacher4', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB003', 11, N'Hóa học lớp 11 - Hữu cơ', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học hóa hữu cơ lớp 11', 530000.00, 0.00, 130, 'Teacher4', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(11, N'Hóa học lớp 11 - Hữu cơ', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học hóa hữu cơ lớp 11', 530000.00, 0.00, 130, 'Teacher4', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB003', 12, N'Hóa học lớp 12 - Luyện thi', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học luyện thi hóa lớp 12', 580000.00, 0.00, 140, 'Teacher4', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(12, N'Hóa học lớp 12 - Luyện thi', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học luyện thi hóa lớp 12', 580000.00, 0.00, 140, 'Teacher4', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB004', 10, N'Sinh học lớp 10 - Sinh lý', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học sinh lý lớp 10', 420000.00, 0.00, 100, 'Teacher5', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(10, N'Sinh học lớp 10 - Sinh lý', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học sinh lý lớp 10', 420000.00, 0.00, 100, 'Teacher5', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB004', 11, N'Sinh học lớp 11 - Di truyền', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học di truyền lớp 11', 470000.00, 0.00, 110, 'Teacher5', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(11, N'Sinh học lớp 11 - Di truyền', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học di truyền lớp 11', 470000.00, 0.00, 110, 'Teacher5', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB004', 12, N'Sinh học lớp 12 - Sinh thái', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học sinh thái lớp 12', 520000.00, 0.00, 120, 'Teacher5', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(12, N'Sinh học lớp 12 - Sinh thái', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học sinh thái lớp 12', 520000.00, 0.00, 120, 'Teacher5', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB005', 10, N'Ngữ văn lớp 10 - Văn học dân gian', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học văn học dân gian lớp 10', 400000.00, 0.00, 90, 'Teacher2', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(10, N'Ngữ văn lớp 10 - Văn học dân gian', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học văn học dân gian lớp 10', 400000.00, 0.00, 90, 'Teacher2', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB005', 11, N'Ngữ văn lớp 11 - Văn học trung đại', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học văn học trung đại lớp 11', 450000.00, 0.00, 100, 'Teacher2', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(11, N'Ngữ văn lớp 11 - Văn học trung đại', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học văn học trung đại lớp 11', 450000.00, 0.00, 100, 'Teacher2', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB005', 12, N'Ngữ văn lớp 12 - Luyện thi', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học luyện thi văn lớp 12', 500000.00, 0.00, 110, 'Teacher2', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(12, N'Ngữ văn lớp 12 - Luyện thi', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học luyện thi văn lớp 12', 500000.00, 0.00, 110, 'Teacher2', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB006', 10, N'Lịch sử lớp 10 - Thế giới', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học lịch sử thế giới lớp 10', 430000.00, 0.00, 100, 'Teacher7', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(10, N'Lịch sử lớp 10 - Thế giới', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học lịch sử thế giới lớp 10', 430000.00, 0.00, 100, 'Teacher7', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB006', 11, N'Lịch sử lớp 11 - Cách mạng', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học cách mạng lớp 11', 480000.00, 0.00, 110, 'Teacher7', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(11, N'Lịch sử lớp 11 - Cách mạng', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học cách mạng lớp 11', 480000.00, 0.00, 110, 'Teacher7', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB006', 12, N'Lịch sử lớp 12 - Việt Nam', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học lịch sử Việt Nam lớp 12', 530000.00, 0.00, 120, 'Teacher7', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(12, N'Lịch sử lớp 12 - Việt Nam', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học lịch sử Việt Nam lớp 12', 530000.00, 0.00, 120, 'Teacher7', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB007', 10, N'Địa lý lớp 10 - Tự nhiên', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học địa lý tự nhiên lớp 10', 410000.00, 0.00, 90, 'Teacher8', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(10, N'Địa lý lớp 10 - Tự nhiên', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học địa lý tự nhiên lớp 10', 410000.00, 0.00, 90, 'Teacher8', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB007', 11, N'Địa lý lớp 11 - Kinh tế', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học địa lý kinh tế lớp 11', 460000.00, 0.00, 100, 'Teacher8', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(11, N'Địa lý lớp 11 - Kinh tế', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học địa lý kinh tế lớp 11', 460000.00, 0.00, 100, 'Teacher8', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB007', 12, N'Địa lý lớp 12 - Dân cư', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học địa lý dân cư lớp 12', 510000.00, 0.00, 110, 'Teacher8', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(12, N'Địa lý lớp 12 - Dân cư', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học địa lý dân cư lớp 12', 510000.00, 0.00, 110, 'Teacher8', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB008', 10, N'Tiếng Anh lớp 10 - Cơ bản', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học tiếng Anh cơ bản lớp 10', 550000.00, 0.00, 130, 'Teacher6', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(10, N'Tiếng Anh lớp 10 - Cơ bản', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học tiếng Anh cơ bản lớp 10', 550000.00, 0.00, 130, 'Teacher6', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB008', 11, N'Tiếng Anh lớp 11 - Giao tiếp', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học tiếng Anh giao tiếp lớp 11', 600000.00, 0.00, 140, 'Teacher6', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(11, N'Tiếng Anh lớp 11 - Giao tiếp', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học tiếng Anh giao tiếp lớp 11', 600000.00, 0.00, 140, 'Teacher6', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB008', 12, N'Tiếng Anh lớp 12 - IELTS', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học IELTS lớp 12', 650000.00, 0.00, 150, 'Teacher6', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(12, N'Tiếng Anh lớp 12 - IELTS', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học IELTS lớp 12', 650000.00, 0.00, 150, 'Teacher6', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB009', 10, N'Giáo dục công dân lớp 10', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học giáo dục công dân lớp 10', 350000.00, 0.00, 80, 'Teacher9', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(10, N'Giáo dục công dân lớp 10', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học giáo dục công dân lớp 10', 350000.00, 0.00, 80, 'Teacher9', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB009', 11, N'Giáo dục công dân lớp 11', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học giáo dục công dân lớp 11', 400000.00, 0.00, 90, 'Teacher9', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(11, N'Giáo dục công dân lớp 11', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học giáo dục công dân lớp 11', 400000.00, 0.00, 90, 'Teacher9', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB009', 12, N'Giáo dục công dân lớp 12', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học giáo dục công dân lớp 12', 450000.00, 15.00, 100, 'Teacher9', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(12, N'Giáo dục công dân lớp 12', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học giáo dục công dân lớp 12', 450000.00, 15.00, 100, 'Teacher9', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB010', 10, N'Tin học lớp 10 - Cơ bản', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học tin học cơ bản lớp 10', 500000.00, 0.00, 120, 'Teacher10', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(10, N'Tin học lớp 10 - Cơ bản', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học tin học cơ bản lớp 10', 500000.00, 0.00, 120, 'Teacher10', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB010', 11, N'Tin học lớp 11 - Lập trình', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học lập trình lớp 11', 550000.00, 0.00, 130, 'Teacher10', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(11, N'Tin học lớp 11 - Lập trình', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học lập trình lớp 11', 550000.00, 0.00, 130, 'Teacher10', GETDATE());
 
-INSERT INTO dbo.Course (SubjectID, GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
-('SUB010', 12, N'Tin học lớp 12 - Thiết kế', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học thiết kế lớp 12', 600000.00, 0.00, 140, 'Teacher10', GETDATE());
+INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
+(12, N'Tin học lớp 12 - Thiết kế', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học thiết kế lớp 12', 600000.00, 0.00, 140, 'Teacher10', GETDATE());
 
 
 SELECT * FROM Teacher

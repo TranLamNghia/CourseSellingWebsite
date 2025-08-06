@@ -7,8 +7,6 @@ public partial class Course
 {
     public string CourseId { get; set; } = null!;
 
-    public string SubjectId { get; set; } = null!;
-
     public int GradeId { get; set; }
 
     public string Title { get; set; } = null!;
@@ -38,8 +36,6 @@ public partial class Course
     public virtual GradeLevel Grade { get; set; } = null!;
 
     public virtual ICollection<Lesson> Lessons { get; set; } = new List<Lesson>();
-
-    public virtual Subject Subject { get; set; } = null!;
 
     public virtual Teacher Teacher { get; set; } = null!;
 }

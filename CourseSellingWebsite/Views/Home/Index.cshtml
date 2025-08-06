@@ -143,73 +143,6 @@
         </div>
     </section>
 
-    <!-- Popular Courses Section -->
-    <section class="courses-section" id="courses">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Khóa học phổ biến</h2>
-                <p class="section-description">Những khóa học được yêu thích nhất bởi các em học sinh THPT</p>
-            </div>
-
-            <div class="courses-grid">
-                <div class="course-card animate-on-scroll">
-                    <div class="course-image">
-                        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Toán học THPT">
-                        <div class="course-price">299,000đ</div>
-                    </div>
-                    <div class="course-content">
-                        <h3 class="course-title">Toán học THPT</h3>
-                        <p class="course-description">Từ cơ bản đến nâng cao, chuẩn bị tốt cho kỳ thi THPT</p>
-                        <div class="course-meta">
-                            <span class="course-students">2,500 học sinh</span>
-                            <div class="course-rating">
-                                <i class="fas fa-star"></i>
-                                <span>4.9</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary btn-full">Tham gia ngay</button>
-                    </div>
-                </div>
-                <div class="course-card animate-on-scroll">
-                    <div class="course-image">
-                        <img src="https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Vật lý THPT">
-                        <div class="course-price">279,000đ</div>
-                    </div>
-                    <div class="course-content">
-                        <h3 class="course-title">Vật lý THPT</h3>
-                        <p class="course-description">Hiểu rõ bản chất, giải bài tập một cách logic</p>
-                        <div class="course-meta">
-                            <span class="course-students">1,800 học sinh</span>
-                            <div class="course-rating">
-                                <i class="fas fa-star"></i>
-                                <span>4.8</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary btn-full">Tham gia ngay</button>
-                    </div>
-                </div>
-                <div class="course-card animate-on-scroll">
-                    <div class="course-image">
-                        <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Hóa học THPT">
-                        <div class="course-price">259,000đ</div>
-                    </div>
-                    <div class="course-content">
-                        <h3 class="course-title">Hóa học THPT</h3>
-                        <p class="course-description">Phương trình hóa học, bài tập tính toán dễ dàng</p>
-                        <div class="course-meta">
-                            <span class="course-students">1,600 học sinh</span>
-                            <div class="course-rating">
-                                <i class="fas fa-star"></i>
-                                <span>4.7</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary btn-full">Tham gia ngay</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Why Choose Us Section -->
     <section class="why-choose-section">
         <div class="container">
@@ -330,6 +263,77 @@
                     <p class="teacher-subject">Giáo viên Hóa học</p>
                     <p class="teacher-experience">10 năm kinh nghiệm</p>
                     <p class="teacher-description">Thạc sĩ Hóa học, chuyên môn sâu về hóa hữu cơ</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Courses Section -->
+    <section class="courses-section" id="courses">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Khóa học phổ biến</h2>
+                <p class="section-description">Những khóa học được yêu thích nhất bởi các em học sinh THPT</p>
+            </div>
+
+            <div class="courses-grid">
+                @* @foreach() *@
+                @* { *@
+                @* } *@
+
+                <div class="course-card animate-on-scroll">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Toán học THPT">
+                        <div class="course-price">299,000đ</div>
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">Toán học THPT</h3>
+                        <p class="course-description">Từ cơ bản đến nâng cao, chuẩn bị tốt cho kỳ thi THPT</p>
+                        <div class="course-meta">
+                            <span class="course-students">2,500 học sinh</span>
+                            <div class="course-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-full">Tham gia ngay</button>
+                    </div>
+                </div>
+                <div class="course-card animate-on-scroll">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Vật lý THPT">
+                        <div class="course-price">279,000đ</div>
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">Vật lý THPT</h3>
+                        <p class="course-description">Hiểu rõ bản chất, giải bài tập một cách logic</p>
+                        <div class="course-meta">
+                            <span class="course-students">1,800 học sinh</span>
+                            <div class="course-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.8</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-full">Tham gia ngay</button>
+                    </div>
+                </div>
+                <div class="course-card animate-on-scroll">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Hóa học THPT">
+                        <div class="course-price">259,000đ</div>
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">Hóa học THPT</h3>
+                        <p class="course-description">Phương trình hóa học, bài tập tính toán dễ dàng</p>
+                        <div class="course-meta">
+                            <span class="course-students">1,600 học sinh</span>
+                            <div class="course-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.7</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-full">Tham gia ngay</button>
+                    </div>
                 </div>
             </div>
         </div>
