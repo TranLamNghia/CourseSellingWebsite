@@ -219,6 +219,25 @@ CREATE TABLE dbo.LessonComment (
 );
 GO
 
+-- CourseReview table
+CREATE TABLE CourseReview (
+    ReviewID	INT			IDENTITY PRIMARY KEY,
+    StudentID	VARCHAR(20)	NOT NULL,
+    CourseID	VARCHAR(20)	NOT NULL,
+    Rating		INT			NULL CHECK (Rating BETWEEN 1 AND 5),
+    ReviewTime	DATETIME	DEFAULT GETDATE(),
+	FOREIGN KEY (StudentID) REFERENCES dbo.Student(StudentID)
+        ON UPDATE NO ACTION ON DELETE NO ACTION,
+	FOREIGN KEY (CourseID) REFERENCES dbo.Course(CourseID)
+        ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+CREATE TABLE CourseRatingStats (
+    CourseID INT PRIMARY KEY,
+    RatingCount INT,
+    RatingAvg DECIMAL(4,2)
+);
+
 
 -- Admin table
 CREATE TABLE dbo.Admin (
@@ -396,6 +415,38 @@ BEGIN
     INNER JOIN DELETED d ON lc.LessonID = d.LessonID;
 END;
 GO
+
+-- Trigger take student's lastest rating for each course to calculate the average
+CREATE TRIGGER trg_AfterInsertUpdate_CourseReview
+ON CourseReview
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    MERGE CourseRatingStats AS target
+    USING (
+        SELECT CourseID,
+               COUNT(*) AS RatingCount,
+               AVG(CAST(Rating AS DECIMAL(4,2))) AS RatingAvg
+        FROM (
+            SELECT CourseID, StudentID,
+                   FIRST_VALUE(Rating) OVER (PARTITION BY CourseID, StudentID ORDER BY ReviewTime DESC) AS Rating
+            FROM CourseReview
+        ) AS LatestRatings
+        WHERE CourseID IN (SELECT DISTINCT CourseID FROM inserted)
+        GROUP BY CourseID
+    ) AS source
+    ON target.CourseID = source.CourseID
+    WHEN MATCHED THEN
+        UPDATE SET RatingCount = source.RatingCount,
+                   RatingAvg = source.RatingAvg
+    WHEN NOT MATCHED THEN
+        INSERT (CourseID, RatingCount, RatingAvg)
+        VALUES (source.CourseID, source.RatingCount, source.RatingAvg);
+END;
+
+
 
 
 -- Insert 
