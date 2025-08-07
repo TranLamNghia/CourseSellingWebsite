@@ -422,11 +422,11 @@ INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gende
 VALUES (N'Nguyễn Thị Hồng', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', 'https://res.cloudinary.com/druj32kwu/image/upload/v1748414230/avatars/1746602901050_a6da5f43-e11e-45ee-bf93-30217dc148ca_1%20%282%29.jpg', 'SUB001', N'Nữ', 'nguyenthihong@example.com', '0901234567', N'Giáo viên Toán xuất sắc', GETDATE());
 
 INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
-VALUES (N'Trần Văn Nam', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', 'SUB005', NULL, N'Nam', 'tranvannam@example.com', '0912345678', N'Chuyên gia Văn học', GETDATE());
+VALUES (N'Trần Văn Nam', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', 'https://res.cloudinary.com/druj32kwu/image/upload/v1754562049/497449735_1008192331498751_2034858360211468963_n_l7awll.jpg', 'SUB005', N'Nam', 'tranvannam@example.com', '0912345678', N'Chuyên gia Văn học', GETDATE());
 
 INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
-VALUES (N'Lê Thị Mai', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', 'https://res.cloudinary.com/druj32kwu/image/upload/v1748414230/avatars/1746602901050_a6da5f43-e11e-45ee-bf93-30217dc148ca_1%20%282%29.jpg', 'SUB002', N'Nữ', 'lethimai@example.com', '0923456789', N'Giảng dạy Lý tốt', GETDATE());
-
+VALUES (N'Lê Thị Mai', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', 'https://res.cloudinary.com/druj32kwu/image/upload/v1754562049/496004694_1008192368165414_6364227513053217997_n_ga7h8w.jpg', 'SUB002', N'Nữ', 'lethimai@example.com', '0923456789', N'Giảng dạy Lý tốt', GETDATE());
+select * from Teacher
 INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
 VALUES (N'Phạm Văn Hùng', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', NULL, 'SUB003', N'Nam', 'phamvanhung@example.com', '0934567890', N'Thầy giáo Hóa học', GETDATE());
 
@@ -434,13 +434,13 @@ INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gende
 VALUES (N'Hoàng Thị Lan', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', NULL, 'SUB005', N'Nữ', 'hoangthilan@example.com', '0945678901', N'Chuyên Sinh học', GETDATE());
 
 INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
-VALUES (N'Đỗ Văn Tuấn', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==','https://res.cloudinary.com/druj32kwu/image/upload/v1748414230/avatars/1746602901050_a6da5f43-e11e-45ee-bf93-30217dc148ca_1%20%282%29.jpg', 'SUB008', N'Nam', 'dovantuan@example.com', '0956789012', N'Giáo viên Anh văn', GETDATE());
+VALUES (N'Đỗ Văn Tuấn', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==','https://res.cloudinary.com/druj32kwu/image/upload/v1754562049/496843971_1008192334832084_7693522351218619999_n_h7qqrq.jpg', 'SUB008', N'Nam', 'dovantuan@example.com', '0956789012', N'Giáo viên Anh văn', GETDATE());
 
 INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
-VALUES (N'Vũ Thị Hoa', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', NULL, 'SUB006', N'Nữ', 'vuthihoa@example.com', '0967890123', N'Chuyên gia Lịch sử', GETDATE());
+VALUES (N'Vũ Thị Hoa', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', 'https://res.cloudinary.com/druj32kwu/image/upload/v1748477204/avatars/1ad3dc7ba3004fd650908c65e9009c4f.jpg', 'SUB006', N'Nữ', 'vuthihoa@example.com', '0967890123', N'Chuyên gia Lịch sử', GETDATE());
 
 INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
-VALUES (N'Bùi Văn Sơn', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', NULL, 'SUB007', N'Nam', 'buivanson@example.com', '0978901234', N'Giảng dạy Địa lý', GETDATE());
+VALUES (N'Bùi Văn Sơn', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', 'https://res.cloudinary.com/druj32kwu/image/upload/v1754562049/495522054_1008192474832070_5512846920330839346_n_wlhrwt.jpg', 'SUB007', N'Nam', 'buivanson@example.com', '0978901234', N'Giảng dạy Địa lý', GETDATE());
 
 INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
 VALUES (N'Ngô Thị Linh', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', 'https://res.cloudinary.com/druj32kwu/image/upload/v1748414230/avatars/1746602901050_a6da5f43-e11e-45ee-bf93-30217dc148ca_1%20%282%29.jpg', 'SUB009', N'Nữ', 'ngothilinh@example.com', '0989012345', N'Chuyên Tin học', GETDATE());

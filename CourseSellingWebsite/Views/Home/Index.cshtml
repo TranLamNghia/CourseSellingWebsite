@@ -1,6 +1,7 @@
 ﻿@{
     Layout = null;
 }
+@model dynamic
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -237,33 +238,18 @@
             </div>
 
             <div class="teachers-grid">
-                <div class="teacher-card animate-on-scroll">
-                    <div class="teacher-image">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Thầy Nguyễn Văn A">
+                @foreach (var teacher in Model.famousTeacher) 
+                {
+                    <div class="teacher-card animate-on-scroll">
+                        <div class="teacher-image">
+                            <img src="@(teacher.AvatarUrl != null ? teacher.AvatarUrl : "https://res.cloudinary.com/druj32kwu/image/upload/v1748472600/avatars/d97bbb08017ac2309307f0822e63d082.jpg")"
+                                 alt="@(teacher.Gender.Equals("Nam") ? "Thầy" : "Cô") @teacher.FullName">
+                        </div>
+                        <h3 class="teacher-name">@(teacher.Gender.Equals("Nam") ? "Thầy" : "Cô") @teacher.FullName</h3>
+                        <p class="teacher-subject">Giáo viên Toán học</p>
+                        <p class="teacher-description">@teacher.Description</p>
                     </div>
-                    <h3 class="teacher-name">Thầy Nguyễn Văn A</h3>
-                    <p class="teacher-subject">Giáo viên Toán học</p>
-                    <p class="teacher-experience">15 năm kinh nghiệm</p>
-                    <p class="teacher-description">Thạc sĩ Toán học, chuyên gia luyện thi THPT Quốc gia</p>
-                </div>
-                <div class="teacher-card animate-on-scroll">
-                    <div class="teacher-image">
-                        <img src="https://images.unsplash.com/photo-1494790108755-2616c9c0e8e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Cô Trần Thị B">
-                    </div>
-                    <h3 class="teacher-name">Cô Trần Thị B</h3>
-                    <p class="teacher-subject">Giáo viên Vật lý</p>
-                    <p class="teacher-experience">12 năm kinh nghiệm</p>
-                    <p class="teacher-description">Tiến sĩ Vật lý, nhiều năm giảng dạy tại các trường THPT</p>
-                </div>
-                <div class="teacher-card animate-on-scroll">
-                    <div class="teacher-image">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Thầy Lê Văn C">
-                    </div>
-                    <h3 class="teacher-name">Thầy Lê Văn C</h3>
-                    <p class="teacher-subject">Giáo viên Hóa học</p>
-                    <p class="teacher-experience">10 năm kinh nghiệm</p>
-                    <p class="teacher-description">Thạc sĩ Hóa học, chuyên môn sâu về hóa hữu cơ</p>
-                </div>
+                }
             </div>
         </div>
     </section>
@@ -277,68 +263,30 @@
             </div>
 
             <div class="courses-grid">
-                @* @foreach() *@
-                @* { *@
-                @* } *@
-
-                <div class="course-card animate-on-scroll">
-                    <div class="course-image">
-                        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Toán học THPT">
-                        <div class="course-price">299,000đ</div>
-                    </div>
-                    <div class="course-content">
-                        <h3 class="course-title">Toán học THPT</h3>
-                        <p class="course-description">Từ cơ bản đến nâng cao, chuẩn bị tốt cho kỳ thi THPT</p>
-                        <div class="course-meta">
-                            <span class="course-students">2,500 học sinh</span>
-                            <div class="course-rating">
-                                <i class="fas fa-star"></i>
-                                <span>4.9</span>
+                @foreach (var course in Model.famousCourse)
+                {
+                    <div class="course-card animate-on-scroll">
+                        <div class="course-image">
+                            <img src="@course.ImageUrl" alt="Toán học THPT">
+                            <div class="course-price">@($"{course.Price:N0} VND")</div>
+                        </div>
+                        <div class="course-content">
+                            <h3 class="course-title">@course.Title</h3>
+                            <p class="course-description">@course.Description</p>
+                            <div class="course-meta">
+                                <span class="course-students">2,500 học sinh</span>
+                                <div class="course-rating">
+                                    <i class="fas fa-star"></i>
+                                    <span>4.9</span>
+                                </div>
                             </div>
                         </div>
-                        <button class="btn btn-primary btn-full">Tham gia ngay</button>
                     </div>
-                </div>
-                <div class="course-card animate-on-scroll">
-                    <div class="course-image">
-                        <img src="https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Vật lý THPT">
-                        <div class="course-price">279,000đ</div>
-                    </div>
-                    <div class="course-content">
-                        <h3 class="course-title">Vật lý THPT</h3>
-                        <p class="course-description">Hiểu rõ bản chất, giải bài tập một cách logic</p>
-                        <div class="course-meta">
-                            <span class="course-students">1,800 học sinh</span>
-                            <div class="course-rating">
-                                <i class="fas fa-star"></i>
-                                <span>4.8</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary btn-full">Tham gia ngay</button>
-                    </div>
-                </div>
-                <div class="course-card animate-on-scroll">
-                    <div class="course-image">
-                        <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Hóa học THPT">
-                        <div class="course-price">259,000đ</div>
-                    </div>
-                    <div class="course-content">
-                        <h3 class="course-title">Hóa học THPT</h3>
-                        <p class="course-description">Phương trình hóa học, bài tập tính toán dễ dàng</p>
-                        <div class="course-meta">
-                            <span class="course-students">1,600 học sinh</span>
-                            <div class="course-rating">
-                                <i class="fas fa-star"></i>
-                                <span>4.7</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary btn-full">Tham gia ngay</button>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     </section>
-
+    
     <!-- Benefits Section -->
     <section class="benefits-section" id="benefits">
         <div class="container">
