@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using CourseSellingWebsite.Models;
+using CourseSellingWebsite.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,6 +45,20 @@ namespace CourseSellingWebsite.Controllers
                 famousCourse
             };
             return View(viewModel);
+        }
+
+        [HttpGet]
+        [Route("/signin")]
+        public IActionResult SignIn()
+        {
+            return View(new SignInVM());
+        }
+
+        [HttpGet]
+        [Route("/signup")]
+        public IActionResult SignUp()
+        {
+            return View(new SignUpVM());
         }
 
         public IActionResult Privacy()

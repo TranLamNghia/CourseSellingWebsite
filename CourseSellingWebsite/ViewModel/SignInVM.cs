@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApplication1.ViewModels
+namespace CourseSellingWebsite.ViewModels
 {
-    public class LoginVM
+    public class SignInVM
     {
         [Required]
         [Phone]
