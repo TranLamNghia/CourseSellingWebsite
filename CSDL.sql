@@ -8,7 +8,7 @@ GO
 
 CREATE TABLE dbo.Subject (
     SubjectID			VARCHAR(30)		NOT NULL PRIMARY KEY,
-    Name				VARCHAR(30)		NOT NULL UNIQUE
+    Name				NVARCHAR(30)	NOT NULL UNIQUE
 );
 GO
 
@@ -21,7 +21,7 @@ CREATE TABLE dbo.Teacher (
     TeachingSubjectID   VARCHAR(30)     NULL,
 	Gender              NVARCHAR(10)    NOT NULL,
     Email               NVARCHAR(200)   NOT NULL UNIQUE,
-    PhoneNumber         NVARCHAR(50)    NULL,
+    PhoneNumber         CHAR(10)		NULL,
     Description         NVARCHAR(MAX)   NULL,
     CreatedAt           DATETIME        NOT NULL DEFAULT GETDATE(),
     CONSTRAINT FK_Teacher_Subject FOREIGN KEY (TeachingSubjectID)
@@ -60,7 +60,7 @@ GO
 -- CourseGoal table
 CREATE TABLE dbo.CourseGoal (
     CourseID            VARCHAR(20)		NOT NULL,
-    GoalOrder           INT IDENTITY(1,1) NOT NULL,
+    GoalOrder           INT				NOT NULL,
     Content             NVARCHAR(1000)  NOT NULL,
     PRIMARY KEY (CourseID, GoalOrder),
     FOREIGN KEY (CourseID) REFERENCES dbo.Course(CourseID)
@@ -70,8 +70,8 @@ GO
 
 -- CourseRequirement table
 CREATE TABLE dbo.CourseRequirement (
-    CourseID            VARCHAR(20)    NOT NULL,
-    RequirementOrder    INT IDENTITY(1,1) NOT NULL,
+    CourseID            VARCHAR(20)		NOT NULL,
+    RequirementOrder    INT				NOT NULL,
     Content             NVARCHAR(1000)  NOT NULL,
     PRIMARY KEY (CourseID, RequirementOrder),
     FOREIGN KEY (CourseID) REFERENCES dbo.Course(CourseID)
@@ -81,8 +81,8 @@ GO
 
 -- Lesson table
 CREATE TABLE dbo.Lesson (
-    LessonID            VARCHAR(30)    NOT NULL PRIMARY KEY,
-    CourseID            VARCHAR(20)    NOT NULL,
+    LessonID            VARCHAR(30)		NOT NULL PRIMARY KEY,
+    CourseID            VARCHAR(20)		NOT NULL,
     LessonOrder         INT             NOT NULL,
     Title               NVARCHAR(200)   NULL,
     VideoUrl            NVARCHAR(1000)  NOT NULL,
@@ -233,11 +233,10 @@ CREATE TABLE CourseReview (
 );
 
 CREATE TABLE CourseRatingStats (
-    CourseID INT PRIMARY KEY,
+    CourseID VARCHAR(20) PRIMARY KEY,
     RatingCount INT,
     RatingAvg DECIMAL(4,2)
 );
-
 
 -- Admin table
 CREATE TABLE dbo.Admin (
@@ -427,12 +426,19 @@ BEGIN
     MERGE CourseRatingStats AS target
     USING (
         SELECT CourseID,
-               COUNT(*) AS RatingCount,
+               COUNT(StudentID) AS RatingCount,
                AVG(CAST(Rating AS DECIMAL(4,2))) AS RatingAvg
         FROM (
-            SELECT CourseID, StudentID,
-                   FIRST_VALUE(Rating) OVER (PARTITION BY CourseID, StudentID ORDER BY ReviewTime DESC) AS Rating
-            FROM CourseReview
+            SELECT CourseID, StudentID, Rating
+            FROM (
+                SELECT CourseID, StudentID, Rating,
+                       ROW_NUMBER() OVER (
+                           PARTITION BY CourseID, StudentID
+                           ORDER BY ReviewTime DESC
+                       ) AS rn
+                FROM CourseReview
+            ) r
+            WHERE rn = 1
         ) AS LatestRatings
         WHERE CourseID IN (SELECT DISTINCT CourseID FROM inserted)
         GROUP BY CourseID
@@ -445,7 +451,7 @@ BEGIN
         INSERT (CourseID, RatingCount, RatingAvg)
         VALUES (source.CourseID, source.RatingCount, source.RatingAvg);
 END;
-
+GO
 
 
 
@@ -477,7 +483,7 @@ VALUES (N'Trần Văn Nam', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYh
 
 INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
 VALUES (N'Lê Thị Mai', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', 'https://res.cloudinary.com/druj32kwu/image/upload/v1754562049/496004694_1008192368165414_6364227513053217997_n_ga7h8w.jpg', 'SUB002', N'Nữ', 'lethimai@example.com', '0923456789', N'Giảng dạy Lý tốt', GETDATE());
-select * from Teacher
+
 INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
 VALUES (N'Phạm Văn Hùng', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', NULL, 'SUB003', N'Nam', 'phamvanhung@example.com', '0934567890', N'Thầy giáo Hóa học', GETDATE());
 

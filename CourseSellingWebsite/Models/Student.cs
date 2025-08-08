@@ -31,6 +31,8 @@ public partial class Student
 
     public virtual ICollection<CourseProgress> CourseProgresses { get; set; } = new List<CourseProgress>();
 
+    public virtual ICollection<CourseReview> CourseReviews { get; set; } = new List<CourseReview>();
+
     public virtual ICollection<CourseStudent> CourseStudents { get; set; } = new List<CourseStudent>();
 
     public virtual GradeLevel? Grade { get; set; }

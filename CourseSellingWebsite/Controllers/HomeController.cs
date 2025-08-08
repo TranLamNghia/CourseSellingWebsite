@@ -19,12 +19,26 @@ namespace CourseSellingWebsite.Controllers
         public IActionResult Index()
         {
             //select famous teacher
-            var famousTeacher = _context.Teachers.Take(3).ToList();
+            var famousTeacher = _context.Teachers.Include(t => t.TeachingSubject).Take(3).ToList();
 
             // select famous course 
-            var famousCourse = _context.Courses.Take(3).ToList();
+            var famousCourse = _context.Courses.Take(3).Select(c => new
+            {
+                c.CourseId,
+                c.Title,
+                c.ImageUrl,
+                c.Price,
+                c.Description,
+                Rating = _context.CourseRatingStats.Where(crs => crs.CourseId == c.CourseId)
+                    .Select(crs => new
+                    {
+                        crs.RatingCount,
+                        crs.RatingAvg
+                    })
+                    .FirstOrDefault()
+            }).ToList();
 
-            var viewModel = new
+        var viewModel = new
             {
                 famousTeacher,
                 famousCourse

@@ -31,6 +31,8 @@ public partial class Course
 
     public virtual ICollection<CourseRequirement> CourseRequirements { get; set; } = new List<CourseRequirement>();
 
+    public virtual ICollection<CourseReview> CourseReviews { get; set; } = new List<CourseReview>();
+
     public virtual ICollection<CourseStudent> CourseStudents { get; set; } = new List<CourseStudent>();
 
     public virtual GradeLevel Grade { get; set; } = null!;

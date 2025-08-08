@@ -246,7 +246,7 @@
                                  alt="@(teacher.Gender.Equals("Nam") ? "Thầy" : "Cô") @teacher.FullName">
                         </div>
                         <h3 class="teacher-name">@(teacher.Gender.Equals("Nam") ? "Thầy" : "Cô") @teacher.FullName</h3>
-                        <p class="teacher-subject">Giáo viên Toán học</p>
+                        <p class="teacher-subject">Giáo viên @teacher.TeachingSubject.Name</p>
                         <p class="teacher-description">@teacher.Description</p>
                     </div>
                 }
@@ -277,7 +277,7 @@
                                 <span class="course-students">2,500 học sinh</span>
                                 <div class="course-rating">
                                     <i class="fas fa-star"></i>
-                                    <span>4.9</span>
+                                    <span>@(course.Rating?.RatingAvg??0)</span>
                                 </div>
                             </div>
                         </div>

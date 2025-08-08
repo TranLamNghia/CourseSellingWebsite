@@ -27,7 +27,11 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<CourseProgress> CourseProgresses { get; set; }
 
+    public virtual DbSet<CourseRatingStat> CourseRatingStats { get; set; }
+
     public virtual DbSet<CourseRequirement> CourseRequirements { get; set; }
+
+    public virtual DbSet<CourseReview> CourseReviews { get; set; }
 
     public virtual DbSet<CourseStudent> CourseStudents { get; set; }
 
@@ -57,11 +61,11 @@ public partial class AppDbContext : DbContext
     {
         modelBuilder.Entity<Admin>(entity =>
         {
-            entity.HasKey(e => e.AdminId).HasName("PK__Admin__719FE4E8A4B55422");
+            entity.HasKey(e => e.AdminId).HasName("PK__Admin__719FE4E864F68BB3");
 
             entity.ToTable("Admin");
 
-            entity.HasIndex(e => e.Email, "UQ__Admin__A9D10534FD9D696E").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Admin__A9D105346B928DD3").IsUnique();
 
             entity.Property(e => e.AdminId)
                 .HasMaxLength(20)
@@ -76,7 +80,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity.HasKey(e => e.CartId).HasName("PK__Cart__51BCD797BD419871");
+            entity.HasKey(e => e.CartId).HasName("PK__Cart__51BCD797EA5E21E3");
 
             entity.ToTable("Cart", tb => tb.HasTrigger("trg_Cart_InsteadOfInsert"));
 
@@ -99,7 +103,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<CartDetail>(entity =>
         {
-            entity.HasKey(e => new { e.CartId, e.CourseId }).HasName("PK__CartDeta__3D2E008FC3BD229C");
+            entity.HasKey(e => new { e.CartId, e.CourseId }).HasName("PK__CartDeta__3D2E008F39661F8D");
 
             entity.ToTable("CartDetail");
 
@@ -124,7 +128,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Course>(entity =>
         {
-            entity.HasKey(e => e.CourseId).HasName("PK__Course__C92D7187EC3A061E");
+            entity.HasKey(e => e.CourseId).HasName("PK__Course__C92D71873DE2481F");
 
             entity.ToTable("Course", tb => tb.HasTrigger("trg_Course_InsteadOfInsert"));
 
@@ -157,7 +161,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<CourseGoal>(entity =>
         {
-            entity.HasKey(e => new { e.CourseId, e.GoalOrder }).HasName("PK__CourseGo__8031A6B63DE8AAC3");
+            entity.HasKey(e => new { e.CourseId, e.GoalOrder }).HasName("PK__CourseGo__8031A6B600F18EA4");
 
             entity.ToTable("CourseGoal");
 
@@ -165,7 +169,6 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("CourseID");
-            entity.Property(e => e.GoalOrder).ValueGeneratedOnAdd();
             entity.Property(e => e.Content).HasMaxLength(1000);
 
             entity.HasOne(d => d.Course).WithMany(p => p.CourseGoals)
@@ -175,7 +178,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<CourseProgress>(entity =>
         {
-            entity.HasKey(e => new { e.StudentId, e.LessonId }).HasName("PK__CoursePr__29CD60B2175D51B8");
+            entity.HasKey(e => new { e.StudentId, e.LessonId }).HasName("PK__CoursePr__29CD60B271457328");
 
             entity.ToTable("CourseProgress");
 
@@ -201,9 +204,20 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("FK__CoursePro__Stude__5DCAEF64");
         });
 
+        modelBuilder.Entity<CourseRatingStat>(entity =>
+        {
+            entity.HasKey(e => e.CourseId).HasName("PK__CourseRa__C92D7187670360EF");
+
+            entity.Property(e => e.CourseId)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("CourseID");
+            entity.Property(e => e.RatingAvg).HasColumnType("decimal(4, 2)");
+        });
+
         modelBuilder.Entity<CourseRequirement>(entity =>
         {
-            entity.HasKey(e => new { e.CourseId, e.RequirementOrder }).HasName("PK__CourseRe__7D70E0DC42A0F086");
+            entity.HasKey(e => new { e.CourseId, e.RequirementOrder }).HasName("PK__CourseRe__7D70E0DC5094482D");
 
             entity.ToTable("CourseRequirement");
 
@@ -211,7 +225,6 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("CourseID");
-            entity.Property(e => e.RequirementOrder).ValueGeneratedOnAdd();
             entity.Property(e => e.Content).HasMaxLength(1000);
 
             entity.HasOne(d => d.Course).WithMany(p => p.CourseRequirements)
@@ -219,9 +232,39 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("FK__CourseReq__Cours__4BAC3F29");
         });
 
+        modelBuilder.Entity<CourseReview>(entity =>
+        {
+            entity.HasKey(e => e.ReviewId).HasName("PK__CourseRe__74BC79AEAA7FE370");
+
+            entity.ToTable("CourseReview", tb => tb.HasTrigger("trg_AfterInsertUpdate_CourseReview"));
+
+            entity.Property(e => e.ReviewId).HasColumnName("ReviewID");
+            entity.Property(e => e.CourseId)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("CourseID");
+            entity.Property(e => e.ReviewTime)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.StudentId)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("StudentID");
+
+            entity.HasOne(d => d.Course).WithMany(p => p.CourseReviews)
+                .HasForeignKey(d => d.CourseId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__CourseRev__Cours__7B5B524B");
+
+            entity.HasOne(d => d.Student).WithMany(p => p.CourseReviews)
+                .HasForeignKey(d => d.StudentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__CourseRev__Stude__7A672E12");
+        });
+
         modelBuilder.Entity<CourseStudent>(entity =>
         {
-            entity.HasKey(e => new { e.CourseId, e.StudentId }).HasName("PK__CourseSt__4A012320B291A929");
+            entity.HasKey(e => new { e.CourseId, e.StudentId }).HasName("PK__CourseSt__4A012320AC94E061");
 
             entity.ToTable("CourseStudent");
 
@@ -249,11 +292,11 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<GradeLevel>(entity =>
         {
-            entity.HasKey(e => e.GradeId).HasName("PK__GradeLev__54F87A37A5AC2834");
+            entity.HasKey(e => e.GradeId).HasName("PK__GradeLev__54F87A37D5BFDB69");
 
             entity.ToTable("GradeLevel");
 
-            entity.HasIndex(e => e.Name, "UQ__GradeLev__737584F6745C879D").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__GradeLev__737584F6732C6B4C").IsUnique();
 
             entity.Property(e => e.GradeId).HasColumnName("GradeID");
             entity.Property(e => e.Name).HasMaxLength(100);
@@ -261,7 +304,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Lesson>(entity =>
         {
-            entity.HasKey(e => e.LessonId).HasName("PK__Lesson__B084ACB0DD14302A");
+            entity.HasKey(e => e.LessonId).HasName("PK__Lesson__B084ACB03DDEA67D");
 
             entity.ToTable("Lesson", tb =>
                 {
@@ -290,7 +333,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<LessonComment>(entity =>
         {
-            entity.HasKey(e => e.CommentId).HasName("PK__LessonCo__C3B4DFAA3BFD82B8");
+            entity.HasKey(e => e.CommentId).HasName("PK__LessonCo__C3B4DFAA49C4C20F");
 
             entity.ToTable("LessonComment", tb => tb.HasTrigger("trg_LessonComment_InsteadOfInsert"));
 
@@ -329,7 +372,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => new { e.StudentId, e.NotificationId }).HasName("PK__Notifica__00C9D89A51EC74B9");
+            entity.HasKey(e => new { e.StudentId, e.NotificationId }).HasName("PK__Notifica__00C9D89AD111053D");
 
             entity.ToTable("Notification");
 
@@ -353,7 +396,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<OrderHistory>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__OrderHis__C3905BAF2E2D7792");
+            entity.HasKey(e => e.OrderId).HasName("PK__OrderHis__C3905BAFFEC40618");
 
             entity.ToTable("OrderHistory", tb => tb.HasTrigger("trg_OrderHistory_InsteadOfInsert"));
 
@@ -380,11 +423,11 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Student>(entity =>
         {
-            entity.HasKey(e => e.StudentId).HasName("PK__Student__32C52A79D966B53B");
+            entity.HasKey(e => e.StudentId).HasName("PK__Student__32C52A7975AEFD28");
 
             entity.ToTable("Student", tb => tb.HasTrigger("trg_Student_InsteadOfInsert"));
 
-            entity.HasIndex(e => e.Email, "UQ__Student__A9D1053443E37B6E").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Student__A9D10534922BE31C").IsUnique();
 
             entity.Property(e => e.StudentId)
                 .HasMaxLength(20)
@@ -410,28 +453,26 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Subject>(entity =>
         {
-            entity.HasKey(e => e.SubjectId).HasName("PK__Subject__AC1BA3880261DB1F");
+            entity.HasKey(e => e.SubjectId).HasName("PK__Subject__AC1BA388A402B0FD");
 
             entity.ToTable("Subject");
 
-            entity.HasIndex(e => e.Name, "UQ__Subject__737584F607D394ED").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__Subject__737584F6F0E1067D").IsUnique();
 
             entity.Property(e => e.SubjectId)
                 .HasMaxLength(30)
                 .IsUnicode(false)
                 .HasColumnName("SubjectID");
-            entity.Property(e => e.Name)
-                .HasMaxLength(30)
-                .IsUnicode(false);
+            entity.Property(e => e.Name).HasMaxLength(30);
         });
 
         modelBuilder.Entity<Teacher>(entity =>
         {
-            entity.HasKey(e => e.TeacherId).HasName("PK__Teacher__EDF25944D749B30E");
+            entity.HasKey(e => e.TeacherId).HasName("PK__Teacher__EDF259444E83A452");
 
             entity.ToTable("Teacher", tb => tb.HasTrigger("trg_Teacher_InsteadOfInsert"));
 
-            entity.HasIndex(e => e.Email, "UQ__Teacher__A9D105346DCE1017").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Teacher__A9D10534F70DC5FB").IsUnique();
 
             entity.Property(e => e.TeacherId)
                 .HasMaxLength(20)
@@ -445,7 +486,10 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.FullName).HasMaxLength(200);
             entity.Property(e => e.Gender).HasMaxLength(10);
             entity.Property(e => e.PassHash).IsUnicode(false);
-            entity.Property(e => e.PhoneNumber).HasMaxLength(50);
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .IsFixedLength();
             entity.Property(e => e.TeachingSubjectId)
                 .HasMaxLength(30)
                 .IsUnicode(false)
