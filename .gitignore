@@ -27,3 +27,5 @@ appsettings.local.json
 # Log and cache files
 *.log
 *.cache
+
+.ConventionalCommits.txt

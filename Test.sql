@@ -40,5 +40,7 @@ select * from Course
 select * from CourseStudent
 select * from CourseRatingStats
 select * from CourseReview
-select * from Teacher
+select * from Teacher order by TeachingSubjectID
 select * from Subject order by SubjectID
+
+update Teacher set Description =  N'Giáo viên Tin học' WHERE TeacherID = 'Teacher10'

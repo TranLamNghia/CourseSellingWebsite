@@ -167,7 +167,7 @@ html, body {
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
     .form-group label {
@@ -213,21 +213,79 @@ html, body {
     box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+input[type="password"]::-webkit-textfield-decoration-container {
+    display: none;
+}
+
 .password-toggle {
     position: absolute;
-    right: 1rem;
-    background: none;
+    right: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
     border: none;
-    color: #9ca3af;
     cursor: pointer;
-    padding: 0.25rem;
-    transition: color 0.3s ease;
-    z-index: 2;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+    .password-toggle i {
+        font-size: 16px;
+        color: #888;
+    }
 
     .password-toggle:hover {
         color: #2563eb;
     }
+
+.password-strength {
+    margin-top: 0;
+    height: 0.2rem;
+    overflow: hidden;
+    transition: height .2s ease;
+}
+    .password-strength.active {
+        height: 0.2rem;
+    }
+
+.strength-bar {
+    position: relative;
+    width: 100%;
+    height: 90%;
+    border-radius: 0.2rem;
+    overflow: hidden;
+    background: linear-gradient(90deg, #ff4757 0%, #ffa502 25%, #2ed573 75%, #1dd1a1 100%);
+}
+
+.strength-cover {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 100%;
+    background: #e9ecef;
+    transition: width .25s linear;
+}
+
+.password-match {
+    display: block;
+    min-height: 1.25rem;
+    line-height: 1.25rem;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+    .password-match:empty::before {
+        content: '\00a0';
+    }
+
+.strength-text {
+    display: none;
+}
 
 .auth-card.admin-mode .password-toggle:hover {
     color: #dc2626;
@@ -246,6 +304,7 @@ html, body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    margin-bottom: 1rem;
 }
 
     .form-checkbox input[type="checkbox"] {
@@ -459,8 +518,7 @@ html, body {
 }
 
 /* Focus States for Accessibility */
-.toggle-label:focus-within,
-.form-control:focus,
+.toggle-label:focus-within,s
 .btn:focus {
     outline: 2px solid #2563eb;
     outline-offset: 2px;
