@@ -18,7 +18,6 @@
     <Folder Include="Areas\Admin\Middleware\" />
     <Folder Include="Areas\Admin\Services\" />
     <Folder Include="Areas\Admin\ViewModels\" />
-    <Folder Include="Areas\Student\Controllers\" />
     <Folder Include="Areas\Student\Middleware\" />
     <Folder Include="Areas\Student\Services\" />
     <Folder Include="Areas\Student\Views\Account\" />

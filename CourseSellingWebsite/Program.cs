@@ -31,10 +31,9 @@ namespace CourseSellingWebsite
 
             app.UseAuthorization();
 
-            app.MapAreaControllerRoute(
-                name: "admin",
-                areaName: "Admin",
-                pattern: "Admin/{controller=Dashboard}/{action=Index}/{id?}");
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
             app.MapControllerRoute(
                 name: "default",

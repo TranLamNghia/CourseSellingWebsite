@@ -1,6 +1,5 @@
-﻿@{
-    Layout = "/Areas/Student/Views/Shared/_StudentLayout.cshtml"; 
-}
+﻿@model dynamic
+
 <main>
     <!-- Hero Section -->
     <section class="hero">
@@ -11,7 +10,7 @@
                     <h1>Bứt phá tri thức<br>Đón đầu tương lai</h1>
                     <p>EduLearn mang đến các khóa học trực tuyến chuyên sâu, giúp học sinh THPT nắm vững kiến thức, rèn luyện tư duy và đạt thành tích xuất sắc trong học tập. Đồng hành cùng bạn trên con đường chinh phục tương lai!.</p>
                     <div class="hero-buttons">
-                        <a href="/student/coursepage" class="btn btn-primary">
+                        <a href="/Student/coursepage" class="btn btn-primary">
                             Xem Khóa Học <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
@@ -32,20 +31,20 @@
             </div>
 
             <div class="course-grid">
-                @foreach (var course in Model.FeaturedCourses)
+                @foreach (var course in Model.courses)
                 {
-                    <a href="" class="course-card" data-id="@course.MaKhoaHoc">
+                    <a href="" class="course-card" data-id="@course.CourseId">
                         <div class="course-image">
-                            <img src="@course.DuongDanAnhKhoaHoc" alt="@course.TieuDe">
-                            <span class="badge">@course.MonHoc</span>
+                            <img src="@course.ImageUrl" alt="@course.Title">
+                            <span class="badge">@course.SubjectName</span>
                         </div>
                         <div class="course-content">
-                            <h3>@course.TieuDe</h3>
-                            <p>@course.MoTa</p>
+                            <h3>@course.Title</h3>
+                            <p>@course.Description</p>
                             <div class="course-meta">
                                 <div class="meta-item">
                                     <i class="fas fa-clock"></i>
-                                    <span>@course.ThoiHan ngày</span>
+                                    <span>@course.DurationDays ngày</span>
                                 </div>
                                 <div class="meta-item">
                                     <i class="fas fa-book-open"></i>
@@ -53,7 +52,7 @@
                                 </div>
                                 <div class="meta-item">
                                     <i class="fas fa-users"></i>
-                                    <span>0+ học viên</span> <!-- Có thể cần bảng thống kê học viên -->
+                                    <span>0+ học viên</span>
                                 </div>
                             </div>
                         </div>
@@ -66,16 +65,16 @@
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star-half-alt"></i>
                                 </div>
-                                <span>(0)</span> <!-- Có thể cần bảng đánh giá -->
+                                <span>(0)</span>
                             </div>
-                            <div class="course-price">@course.GiaKhoaHoc.ToString("N0")₫</div>
+                            <div class="course-price">@course.Price.ToString("N0")₫</div>
                         </div>
                     </a>
                 }
             </div>
 
             <div class="view-all">
-                <a href="/student/coursepage" class="btn btn-outline">Xem Tất Cả Khóa Học</a>
+                <a href="/Student/coursepage" class="btn btn-outline">Xem Tất Cả Khóa Học</a>
             </div>
         </div>
     </section>
@@ -91,7 +90,7 @@
                 @{
                     int i = 0;
                 }
-                @foreach (var subject in Model.Subjects)
+                @foreach (var subject in Model.subjects)
                 {
                     if (i >= 10) break;
                     i++;
@@ -99,7 +98,7 @@
                         <div class="category-icon">
                             <i class="fas fa-book"></i>
                         </div>
-                        <h3>@subject.Subject</h3>
+                        <h3>@subject.Name</h3>
                         <p>@subject.Count khóa học</p>
                     </a>
                 }

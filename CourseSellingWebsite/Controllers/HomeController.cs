@@ -39,7 +39,7 @@ namespace CourseSellingWebsite.Controllers
                     .FirstOrDefault()
             }).ToList();
 
-        var viewModel = new
+            var viewModel = new
             {
                 famousTeacher,
                 famousCourse
