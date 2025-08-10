@@ -1,0 +1,52 @@
+﻿@{
+    var ctrl = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span class="logo-text">EduLearn</span>
+        </div>
+        <button class="sidebar-toggle" id="toggleSidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <ul class="nav-menu">
+        <li class="nav-item @(ctrl=="Dashboard" ? "active" : "")">
+            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="nav-link">
+                <i class="fas fa-tachometer-alt"></i><span class="nav-text">Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item @(ctrl=="Teachers" ? "active" : "")">
+            <a asp-area="Admin" asp-controller="Teachers" asp-action="Index" class="nav-link">
+                <i class="fas fa-chalkboard-teacher"></i><span class="nav-text">Giáo Viên</span>
+            </a>
+        </li>
+        <li class="nav-item @(ctrl=="Students" ? "active" : "")">
+            <a asp-area="Admin" asp-controller="Students" asp-action="Index" class="nav-link">
+                <i class="fas fa-user-graduate"></i><span class="nav-text">Học Sinh</span>
+            </a>
+        </li>
+        <li class="nav-item @(ctrl=="Courses" ? "active" : "")">
+            <a asp-area="Admin" asp-controller="Courses" asp-action="Index" class="nav-link">
+                <i class="fas fa-book-open"></i><span class="nav-text">Khóa Học</span>
+            </a>
+        </li>
+        <li class="nav-item @(ctrl=="Statistics" ? "active" : "")">
+            <a asp-area="Admin" asp-controller="Statistics" asp-action="Index" class="nav-link">
+                <i class="fas fa-chart-bar"></i><span class="nav-text">Thống Kê</span>
+            </a>
+        </li>
+        <li class="nav-item @(ctrl=="Sales" ? "active" : "")">
+            <a asp-area="Admin" asp-controller="Sales" asp-action="Index" class="nav-link">
+                <i class="fas fa-dollar-sign"></i><span class="nav-text">Doanh Số</span>
+            </a>
+        </li>
+        <li class="nav-item @(ctrl=="Settings" ? "active" : "")">
+            <a asp-area="Admin" asp-controller="Settings" asp-action="Index" class="nav-link">
+                <i class="fas fa-cog"></i><span class="nav-text">Cài Đặt</span>
+            </a>
+        </li>
+    </ul>
+</nav>

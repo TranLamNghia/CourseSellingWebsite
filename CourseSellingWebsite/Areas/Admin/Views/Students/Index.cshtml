@@ -1,0 +1,92 @@
+﻿@{
+	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+	ViewBag.Title = "Dashboard - EduLearn Admin";
+	ViewBag.PageTitle = "Dashboard";
+}
+
+@section Styles {
+	<!-- Nếu trang này cần CSS riêng, thêm ở đây -->
+}
+
+<div class="page-content">
+    <div class="filter-bar">
+        <div class="search-input">
+            <input type="text" placeholder="Tìm kiếm học sinh...">
+        </div>
+        <div class="filter-select">
+            <select>
+                <option value="">Tất cả trạng thái</option>
+                <option value="active">Hoạt động</option>
+                <option value="inactive">Không hoạt động</option>
+            </select>
+        </div>
+        <a href="#" class="add-new-btn"><i class="fas fa-plus"></i> Thêm Học Sinh Mới</a>
+    </div>
+
+    <div class="data-table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên Học Sinh</th>
+                    <th>Email</th>
+                    <th>Ngày Đăng Ký</th>
+                    <th>Số Khóa Học</th>
+                    <th>Trạng Thái</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>HS001</td>
+                    <td>Nguyễn Thị E</td>
+                    <td>nguyenthie@edulearn.vn</td>
+                    <td>2023-01-15</td>
+                    <td>3</td>
+                    <td><span class="status-badge active">Hoạt động</span></td>
+                    <td class="actions-cell">
+                        <button class="action-btn-icon"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn-icon"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>HS002</td>
+                    <td>Trần Văn F</td>
+                    <td>tranvanf@edulearn.vn</td>
+                    <td>2023-02-20</td>
+                    <td>1</td>
+                    <td><span class="status-badge active">Hoạt động</span></td>
+                    <td class="actions-cell">
+                        <button class="action-btn-icon"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn-icon"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>HS003</td>
+                    <td>Lê Thị G</td>
+                    <td>lethig@edulearn.vn</td>
+                    <td>2023-03-01</td>
+                    <td>0</td>
+                    <td><span class="status-badge inactive">Không hoạt động</span></td>
+                    <td class="actions-cell">
+                        <button class="action-btn-icon"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn-icon"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>HS004</td>
+                    <td>Phạm Văn H</td>
+                    <td>phamvanh@edulearn.vn</td>
+                    <td>2023-04-10</td>
+                    <td>2</td>
+                    <td><span class="status-badge active">Hoạt động</span></td>
+                    <td class="actions-cell">
+                        <button class="action-btn-icon"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn-icon"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+

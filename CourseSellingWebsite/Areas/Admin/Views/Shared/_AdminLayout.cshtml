@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>@(ViewData["Title"] ?? "EduLearn Admin")</title>
+
+    <link rel="stylesheet" href="~/css/admincss.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+    <div class="admin-container">
+        @* Sidebar *@
+        @await Html.PartialAsync("_AdminSidebar")
+
+        @* Main *@
+        <main class="main-content">
+            @await Html.PartialAsync("_AdminHeader")
+
+            <div class="content-body">
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const btn = document.getElementById('toggleSidebar');
+          const sidebar = document.getElementById('sidebar');
+          if (btn && sidebar) {
+            btn.addEventListener('click', ()=> sidebar.classList.toggle('collapsed'));
+          }
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -14,4 +14,17 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Middleware\" />
+    <Folder Include="Areas\Admin\Services\" />
+    <Folder Include="Areas\Admin\ViewModels\" />
+    <Folder Include="Areas\Student\Controllers\" />
+    <Folder Include="Areas\Student\Middleware\" />
+    <Folder Include="Areas\Student\Services\" />
+    <Folder Include="Areas\Student\Views\Account\" />
+    <Folder Include="Areas\Student\Views\Cart\" />
+    <Folder Include="Areas\Student\Views\Course\" />
+    <Folder Include="Areas\Student\Views\Lesson\" />
+  </ItemGroup>
+
 </Project>

@@ -54,6 +54,13 @@ namespace CourseSellingWebsite.Controllers
             return View(new SignInVM());
         }
 
+        [HttpPost]
+        [Route("/signin")]
+        public async Task<IActionResult> SignIn(Student st)
+        {
+            return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+        }
+
         [HttpGet]
         [Route("/signup")]
         public IActionResult SignUp()

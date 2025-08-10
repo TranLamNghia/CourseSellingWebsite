@@ -1,0 +1,129 @@
+﻿@section Styles {
+    <!-- Nếu trang này cần CSS riêng, thêm ở đây -->
+}
+
+<div class="page-content active">
+    <div class="content-header">
+        <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="teachers-list">Danh Sách Giáo Viên</button>
+            <button class="tab-btn" data-tab="add-teacher">Thêm Giáo Viên</button>
+        </div>
+    </div>
+
+    <div class="filter-bar">
+        <div class="search-input">
+            <input type="text" placeholder="Tìm kiếm giáo viên...">
+        </div>
+        <div class="filter-select">
+            <select>
+                <option value="">Tất cả trạng thái</option>
+                <option value="active">Hoạt động</option>
+                <option value="inactive">Không hoạt động</option>
+            </select>
+        </div>
+        <a href="#" class="add-new-btn"><i class="fas fa-plus"></i> Thêm Giáo Viên Mới</a>
+    </div>
+
+    <div class="data-table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên Giáo Viên</th>
+                    <th>Email</th>
+                    <th>Môn Học</th>
+                    <th>Số Khóa Học</th>
+                    <th>Trạng Thái</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>GV001</td>
+                    <td>Nguyễn Văn A</td>
+                    <td>nguyenvana@edulearn.vn</td>
+                    <td>Toán học</td>
+                    <td>5</td>
+                    <td><span class="status-badge active">Hoạt động</span></td>
+                    <td class="actions-cell">
+                        <button class="action-btn-icon"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn-icon"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>GV002</td>
+                    <td>Trần Thị B</td>
+                    <td>tranthib@edulearn.vn</td>
+                    <td>Vật lý</td>
+                    <td>3</td>
+                    <td><span class="status-badge active">Hoạt động</span></td>
+                    <td class="actions-cell">
+                        <button class="action-btn-icon"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn-icon"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>GV003</td>
+                    <td>Lê Văn C</td>
+                    <td>levanc@edulearn.vn</td>
+                    <td>Hóa học</td>
+                    <td>2</td>
+                    <td><span class="status-badge inactive">Không hoạt động</span></td>
+                    <td class="actions-cell">
+                        <button class="action-btn-icon"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn-icon"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>GV004</td>
+                    <td>Phạm Thị D</td>
+                    <td>phamthid@edulearn.vn</td>
+                    <td>Ngữ văn</td>
+                    <td>4</td>
+                    <td><span class="status-badge active">Hoạt động</span></td>
+                    <td class="actions-cell">
+                        <button class="action-btn-icon"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn-icon"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tab-content" id="add-teacher">
+        <div class="form-container">
+            <h3 style="color: #2d3748; margin-bottom: 20px;">Thêm Giáo Viên Mới</h3>
+            <form>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Họ và Tên *</label>
+                        <input type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Số Điện Thoại *</label>
+                        <input type="tel" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Môn Dạy *</label>
+                        <select required>
+                            <option value="">Chọn môn học</option>
+                            <option value="math">Toán học</option>
+                            <option value="physics">Vật lý</option>
+                            <option value="chemistry">Hóa học</option>
+                            <option value="english">Tiếng Anh</option>
+                            <option value="literature">Ngữ văn</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="document.querySelector('.tab-buttons [data-tab=\'teachers-list\']').click()">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Thêm Giáo Viên</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

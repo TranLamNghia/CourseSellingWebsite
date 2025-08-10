@@ -1,0 +1,163 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Dashboard - EduLearn Admin";
+    ViewBag.PageTitle = "Dashboard";
+}
+
+@section Styles {
+    <!-- Nếu trang này cần CSS riêng, thêm ở đây -->
+}
+
+<div class="page-content">
+    <div class="content-header">
+        <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="all-courses">Tất Cả Khóa Học</button>
+            <button class="tab-btn" data-tab="add-course">Thêm Khóa Học Mới</button>
+        </div>
+    </div>
+
+    <div id="all-courses" class="tab-content active">
+        <div class="filter-bar">
+            <div class="search-input">
+                <input type="text" placeholder="Tìm kiếm khóa học...">
+            </div>
+            <div class="filter-select">
+                <select>
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="published">Đã xuất bản</option>
+                    <option value="draft">Bản nháp</option>
+                    <option value="archived">Lưu trữ</option>
+                </select>
+            </div>
+            <div class="filter-select">
+                <select>
+                    <option value="">Tất cả danh mục</option>
+                    <option value="math">Toán học</option>
+                    <option value="physics">Vật lý</option>
+                    <option value="chemistry">Hóa học</option>
+                    <option value="literature">Ngữ văn</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="data-table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên Khóa Học</th>
+                        <th>Giáo Viên</th>
+                        <th>Danh Mục</th>
+                        <th>Giá</th>
+                        <th>Số Bài Học</th>
+                        <th>Trạng Thái</th>
+                        <th>Hành Động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>KH001</td>
+                        <td>Lập trình Web cơ bản</td>
+                        <td>Nguyễn Văn A</td>
+                        <td>Công nghệ</td>
+                        <td>1.500.000 VNĐ</td>
+                        <td>20</td>
+                        <td><span class="status-badge published">Đã xuất bản</span></td>
+                        <td class="actions-cell">
+                            <button class="action-btn-icon"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn-icon"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>KH002</td>
+                        <td>Toán cao cấp A1</td>
+                        <td>Trần Thị B</td>
+                        <td>Toán học</td>
+                        <td>1.200.000 VNĐ</td>
+                        <td>15</td>
+                        <td><span class="status-badge draft">Bản nháp</span></td>
+                        <td class="actions-cell">
+                            <button class="action-btn-icon"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn-icon"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>KH003</td>
+                        <td>Vật lý đại cương</td>
+                        <td>Lê Văn C</td>
+                        <td>Vật lý</td>
+                        <td>1.000.000 VNĐ</td>
+                        <td>18</td>
+                        <td><span class="status-badge published">Đã xuất bản</span></td>
+                        <td class="actions-cell">
+                            <button class="action-btn-icon"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn-icon"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>KH004</td>
+                        <td>Ngữ văn 12: Phân tích tác phẩm</td>
+                        <td>Phạm Thị D</td>
+                        <td>Ngữ văn</td>
+                        <td>900.000 VNĐ</td>
+                        <td>12</td>
+                        <td><span class="status-badge archived">Lưu trữ</span></td>
+                        <td class="actions-cell">
+                            <button class="action-btn-icon"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn-icon"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="add-course" class="tab-content">
+        <form>
+            <div class="form-group">
+                <label for="courseName">Tên Khóa Học</label>
+                <input type="text" id="courseName" placeholder="Nhập tên khóa học" required>
+            </div>
+            <div class="form-group">
+                <label for="courseTeacher">Giáo Viên</label>
+                <select id="courseTeacher" required>
+                    <option value="">Chọn giáo viên</option>
+                    <option value="GV001">Nguyễn Văn A</option>
+                    <option value="GV002">Trần Thị B</option>
+                    <option value="GV003">Lê Văn C</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="courseCategory">Danh Mục</label>
+                <select id="courseCategory" required>
+                    <option value="">Chọn danh mục</option>
+                    <option value="math">Toán học</option>
+                    <option value="physics">Vật lý</option>
+                    <option value="chemistry">Hóa học</option>
+                    <option value="literature">Ngữ văn</option>
+                    <option value="it">Công nghệ thông tin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="coursePrice">Giá (VNĐ)</label>
+                <input type="number" id="coursePrice" placeholder="Nhập giá khóa học" required>
+            </div>
+            <div class="form-group">
+                <label for="courseDescription">Mô Tả</label>
+                <textarea id="courseDescription" rows="5" placeholder="Nhập mô tả khóa học"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="courseStatus">Trạng Thái</label>
+                <select id="courseStatus" required>
+                    <option value="draft">Bản nháp</option>
+                    <option value="published">Đã xuất bản</option>
+                    <option value="archived">Lưu trữ</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Lưu Khóa Học</button>
+                <button type="reset" class="btn btn-secondary">Hủy</button>
+            </div>
+        </form>
+    </div>
+</div>
