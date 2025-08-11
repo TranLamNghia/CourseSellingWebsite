@@ -1,4 +1,5 @@
 using CourseSellingWebsite.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CourseSellingWebsite
@@ -8,6 +9,22 @@ namespace CourseSellingWebsite
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddIdentity<AppUser, IdentityRole>(opt =>
+            {
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequiredLength = 6;
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
+            builder.Services.ConfigureApplicationCookie(opt =>
+            {
+                opt.LoginPath = "/signin";
+                opt.AccessDeniedPath = "/access-denied";
+                opt.SlidingExpiration = true;
+            });
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -29,6 +46,7 @@ namespace CourseSellingWebsite
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

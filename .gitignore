@@ -28,4 +28,4 @@ appsettings.local.json
 *.log
 *.cache
 
-.ConventionalCommits.txt
+ConventionalCommits.txt
