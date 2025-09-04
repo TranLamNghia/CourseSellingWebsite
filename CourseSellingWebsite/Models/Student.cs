@@ -9,8 +9,6 @@ public partial class Student
 
     public string FullName { get; set; } = null!;
 
-    public string PassHash { get; set; } = null!;
-
     public int? GradeId { get; set; }
 
     public string? AvatarUrl { get; set; }

@@ -16,7 +16,6 @@ GO
 CREATE TABLE dbo.Teacher (
     TeacherID           VARCHAR(20)     NOT NULL PRIMARY KEY,
     FullName            NVARCHAR(200)   NOT NULL,
-    PassHash            VARCHAR(MAX)    NOT NULL,
     AvatarUrl           NVARCHAR(1000)  NULL,
     TeachingSubjectID   VARCHAR(30)     NULL,
 	Gender              NVARCHAR(10)    NOT NULL,
@@ -96,7 +95,6 @@ GO
 CREATE TABLE dbo.Student (
     StudentID           VARCHAR(20)    NOT NULL PRIMARY KEY,
     FullName            NVARCHAR(200)   NOT NULL,
-    PassHash            VARCHAR(MAX)    NOT NULL,
 	GradeID				INT				NULL,
     AvatarUrl           NVARCHAR(1000)  NULL,
     Email               NVARCHAR(200)   NOT NULL UNIQUE,
@@ -269,10 +267,10 @@ BEGIN
         SET @MinUnused += 1;
 
     INSERT INTO dbo.Teacher
-		(TeacherID, FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
+		(TeacherID, FullName, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
     SELECT
         COALESCE(i.TeacherID, 'Teacher' + CAST(@MinUnused AS VARCHAR)),
-        i.FullName, i.PassHash, i.AvatarUrl, i.TeachingSubjectID, i.Gender, i.Email, i.PhoneNumber, i.Description, GETDATE()
+        i.FullName, i.AvatarUrl, i.TeachingSubjectID, i.Gender, i.Email, i.PhoneNumber, i.Description, GETDATE()
     FROM inserted AS i;
 END;
 GO
@@ -312,10 +310,10 @@ BEGIN
     WHERE ISNUMERIC(SUBSTRING(StudentID, 8, LEN(StudentID) - 7)) = 1;
     SET @MaxID = ISNULL(@MaxID, 0);
 
-    INSERT INTO Student(StudentID, FullName, PassHash, GradeID, AvatarUrl, Email, PhoneNumber, BirthDate, Gender, Address, RegisteredAt)
+    INSERT INTO Student(StudentID, FullName, GradeID, AvatarUrl, Email, PhoneNumber, BirthDate, Gender, Address, RegisteredAt)
     SELECT
         'Student' + CAST(@MaxID + ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS VARCHAR),
-        i.FullName, i.PassHash, i.GradeID, i.AvatarUrl, i.Email, i.PhoneNumber, i.BirthDate, i.Gender, i.Address, i.GradeID
+        i.FullName, i.GradeID, i.AvatarUrl, i.Email, i.PhoneNumber, i.BirthDate, i.Gender, i.Address, i.GradeID
     FROM inserted AS i;
 END;
 GO
@@ -475,35 +473,35 @@ INSERT INTO dbo.GradeLevel (Name) VALUES (N'Lớp 11');
 INSERT INTO dbo.GradeLevel (Name) VALUES (N'Lớp 12');
 
 -- Insert Teacher
-INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
-VALUES (N'Nguyễn Thị Hồng', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', 'https://res.cloudinary.com/druj32kwu/image/upload/v1748414230/avatars/1746602901050_a6da5f43-e11e-45ee-bf93-30217dc148ca_1%20%282%29.jpg', 'SUB001', N'Nữ', 'nguyenthihong@example.com', '0901234567', N'Giáo viên Toán xuất sắc', GETDATE());
+INSERT INTO dbo.Teacher (FullName, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
+VALUES (N'Nguyễn Thị Hồng', 'https://res.cloudinary.com/druj32kwu/image/upload/v1748414230/avatars/1746602901050_a6da5f43-e11e-45ee-bf93-30217dc148ca_1%20%282%29.jpg', 'SUB001', N'Nữ', 'nguyenthihong@example.com', '0901234567', N'Giáo viên Toán xuất sắc', GETDATE());
 
-INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
-VALUES (N'Trần Văn Nam', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', 'https://res.cloudinary.com/druj32kwu/image/upload/v1754562049/497449735_1008192331498751_2034858360211468963_n_l7awll.jpg', 'SUB005', N'Nam', 'tranvannam@example.com', '0912345678', N'Chuyên gia Văn học', GETDATE());
+INSERT INTO dbo.Teacher (FullName, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
+VALUES (N'Trần Văn Nam', 'https://res.cloudinary.com/druj32kwu/image/upload/v1754562049/497449735_1008192331498751_2034858360211468963_n_l7awll.jpg', 'SUB005', N'Nam', 'tranvannam@example.com', '0912345678', N'Chuyên gia Văn học', GETDATE());
 
-INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
-VALUES (N'Lê Thị Mai', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', 'https://res.cloudinary.com/druj32kwu/image/upload/v1754562049/496004694_1008192368165414_6364227513053217997_n_ga7h8w.jpg', 'SUB002', N'Nữ', 'lethimai@example.com', '0923456789', N'Giảng dạy Lý tốt', GETDATE());
+INSERT INTO dbo.Teacher (FullName, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
+VALUES (N'Lê Thị Mai', 'https://res.cloudinary.com/druj32kwu/image/upload/v1754562049/496004694_1008192368165414_6364227513053217997_n_ga7h8w.jpg', 'SUB002', N'Nữ', 'lethimai@example.com', '0923456789', N'Giảng dạy Lý tốt', GETDATE());
 
-INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
-VALUES (N'Phạm Văn Hùng', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', NULL, 'SUB003', N'Nam', 'phamvanhung@example.com', '0934567890', N'Thầy giáo Hóa học', GETDATE());
+INSERT INTO dbo.Teacher (FullName, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
+VALUES (N'Phạm Văn Hùng', NULL, 'SUB003', N'Nam', 'phamvanhung@example.com', '0934567890', N'Thầy giáo Hóa học', GETDATE());
 
-INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
-VALUES (N'Hoàng Thị Lan', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', NULL, 'SUB004', N'Nữ', 'hoangthilan@example.com', '0945678901', N'Chuyên Sinh học', GETDATE());
+INSERT INTO dbo.Teacher (FullName, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
+VALUES (N'Hoàng Thị Lan', NULL, 'SUB004', N'Nữ', 'hoangthilan@example.com', '0945678901', N'Chuyên Sinh học', GETDATE());
 
-INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
-VALUES (N'Đỗ Văn Tuấn', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==','https://res.cloudinary.com/druj32kwu/image/upload/v1754562049/496843971_1008192334832084_7693522351218619999_n_h7qqrq.jpg', 'SUB008', N'Nam', 'dovantuan@example.com', '0956789012', N'Giáo viên Anh văn', GETDATE());
+INSERT INTO dbo.Teacher (FullName, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
+VALUES (N'Đỗ Văn Tuấn','https://res.cloudinary.com/druj32kwu/image/upload/v1754562049/496843971_1008192334832084_7693522351218619999_n_h7qqrq.jpg', 'SUB008', N'Nam', 'dovantuan@example.com', '0956789012', N'Giáo viên Anh văn', GETDATE());
 
-INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
-VALUES (N'Vũ Thị Hoa', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', 'https://res.cloudinary.com/druj32kwu/image/upload/v1748477204/avatars/1ad3dc7ba3004fd650908c65e9009c4f.jpg', 'SUB006', N'Nữ', 'vuthihoa@example.com', '0967890123', N'Chuyên gia Lịch sử', GETDATE());
+INSERT INTO dbo.Teacher (FullName, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
+VALUES (N'Vũ Thị Hoa', 'https://res.cloudinary.com/druj32kwu/image/upload/v1748477204/avatars/1ad3dc7ba3004fd650908c65e9009c4f.jpg', 'SUB006', N'Nữ', 'vuthihoa@example.com', '0967890123', N'Chuyên gia Lịch sử', GETDATE());
 
-INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
-VALUES (N'Bùi Văn Sơn', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', 'https://res.cloudinary.com/druj32kwu/image/upload/v1754562049/495522054_1008192474832070_5512846920330839346_n_wlhrwt.jpg', 'SUB007', N'Nam', 'buivanson@example.com', '0978901234', N'Giảng dạy Địa lý', GETDATE());
+INSERT INTO dbo.Teacher (FullName, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
+VALUES (N'Bùi Văn Sơn', 'https://res.cloudinary.com/druj32kwu/image/upload/v1754562049/495522054_1008192474832070_5512846920330839346_n_wlhrwt.jpg', 'SUB007', N'Nam', 'buivanson@example.com', '0978901234', N'Giảng dạy Địa lý', GETDATE());
 
-INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
-VALUES (N'Ngô Thị Linh', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', 'https://res.cloudinary.com/druj32kwu/image/upload/v1748414230/avatars/1746602901050_a6da5f43-e11e-45ee-bf93-30217dc148ca_1%20%282%29.jpg', 'SUB009', N'Nữ', 'ngothilinh@example.com', '0989012345', N'Giảng dạy GDCD', GETDATE());
+INSERT INTO dbo.Teacher (FullName, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
+VALUES (N'Ngô Thị Linh', 'https://res.cloudinary.com/druj32kwu/image/upload/v1748414230/avatars/1746602901050_a6da5f43-e11e-45ee-bf93-30217dc148ca_1%20%282%29.jpg', 'SUB009', N'Nữ', 'ngothilinh@example.com', '0989012345', N'Giảng dạy GDCD', GETDATE());
 
-INSERT INTO dbo.Teacher (FullName, PassHash, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
-VALUES (N'Lý Văn Đạt', 'AQAAAAIAAYagAAAAEPBTMAOrkabgrzzyPWbupIoCW+A3XEkgDYhkECpIKh+I4MXb/bfXzmvY1cqAtjDA6Q==', NULL, 'SUB010', N'Nam', 'lyvanda@example.com', '0990123456', N'Giáo viên Tin học', GETDATE());
+INSERT INTO dbo.Teacher (FullName, AvatarUrl, TeachingSubjectID, Gender, Email, PhoneNumber, Description, CreatedAt)
+VALUES (N'Lý Văn Đạt', NULL, 'SUB010', N'Nam', 'lyvanda@example.com', '0990123456', N'Giáo viên Tin học', GETDATE());
 
 -- Insert Course
 INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPercent, DurationDays, TeacherID, UpdatedAt) VALUES
@@ -597,8 +595,8 @@ INSERT INTO dbo.Course (GradeID, Title, ImageUrl, Description, Price, DiscountPe
 (12, N'Tin học lớp 12 - Thiết kế', 'https://res.cloudinary.com/druj32kwu/image/upload/v1747841841/unknown_g8spau.png', N'Khóa học thiết kế lớp 12', 600000.00, 0.00, 140, 'Teacher10', GETDATE());
 
 
-SELECT * FROM Teacher
-ORDER BY CAST(SUBSTRING(TeacherID, 8, LEN(TeacherID) - 7) AS INT) ASC;
+SELECT * FROM Course
+ORDER BY CAST(SUBSTRING(CourseID, 7, LEN(CourseID) - 6) AS INT) ASC;
 
 
 /*

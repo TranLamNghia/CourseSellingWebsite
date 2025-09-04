@@ -5,8 +5,7 @@ namespace CourseSellingWebsite.ViewModels
     public class SignInVM
     {
         [Required]
-        [Phone]
-        public string DienThoai { get; set; }
+        public string UserName { get; set; }
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }

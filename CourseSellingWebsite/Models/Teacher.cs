@@ -9,8 +9,6 @@ public partial class Teacher
 
     public string FullName { get; set; } = null!;
 
-    public string PassHash { get; set; } = null!;
-
     public string? AvatarUrl { get; set; }
 
     public string? TeachingSubjectId { get; set; }

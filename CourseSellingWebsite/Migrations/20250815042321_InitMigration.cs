@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CourseSellingWebsite.Migrations
 {
     /// <inheritdoc />
-    public partial class AddIdentityTables : Migration
+    public partial class InitMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,14 +17,13 @@ namespace CourseSellingWebsite.Migrations
                 {
                     AdminID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    PassHash = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
                     AvatarUrl = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Admin__719FE4E864F68BB3", x => x.AdminID);
+                    table.PrimaryKey("PK__Admin__719FE4E8C823D499", x => x.AdminID);
                 });
 
             migrationBuilder.CreateTable(
@@ -42,34 +41,6 @@ namespace CourseSellingWebsite.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TeacherId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PersonType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CourseRatingStats",
                 columns: table => new
                 {
@@ -79,7 +50,7 @@ namespace CourseSellingWebsite.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__CourseRa__C92D7187670360EF", x => x.CourseID);
+                    table.PrimaryKey("PK__CourseRa__C92D7187EF4AF8EB", x => x.CourseID);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,7 +63,7 @@ namespace CourseSellingWebsite.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__GradeLev__54F87A37D5BFDB69", x => x.GradeID);
+                    table.PrimaryKey("PK__GradeLev__54F87A37D7E892AF", x => x.GradeID);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,7 +75,7 @@ namespace CourseSellingWebsite.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Subject__AC1BA388A402B0FD", x => x.SubjectID);
+                    table.PrimaryKey("PK__Subject__AC1BA388DC48C962", x => x.SubjectID);
                 });
 
             migrationBuilder.CreateTable(
@@ -125,6 +96,170 @@ namespace CourseSellingWebsite.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Student",
+                columns: table => new
+                {
+                    StudentID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    GradeID = table.Column<int>(type: "int", nullable: true),
+                    AvatarUrl = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    BirthDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    RegisteredAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Student__32C52A79853677EE", x => x.StudentID);
+                    table.ForeignKey(
+                        name: "FK__Student__GradeID__5441852A",
+                        column: x => x.GradeID,
+                        principalTable: "GradeLevel",
+                        principalColumn: "GradeID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Teacher",
+                columns: table => new
+                {
+                    TeacherID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    AvatarUrl = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    TeachingSubjectID = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "char(10)", unicode: false, fixedLength: true, maxLength: 10, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Teacher__EDF25944E1FCA7A8", x => x.TeacherID);
+                    table.ForeignKey(
+                        name: "FK_Teacher_Subject",
+                        column: x => x.TeachingSubjectID,
+                        principalTable: "Subject",
+                        principalColumn: "SubjectID",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cart",
+                columns: table => new
+                {
+                    CartID = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: false),
+                    StudentID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Cart__51BCD797E954E92B", x => x.CartID);
+                    table.ForeignKey(
+                        name: "FK__Cart__StudentID__628FA481",
+                        column: x => x.StudentID,
+                        principalTable: "Student",
+                        principalColumn: "StudentID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notification",
+                columns: table => new
+                {
+                    NotificationID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Body = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Notifica__00C9D89A8B65898F", x => new { x.StudentID, x.NotificationID });
+                    table.ForeignKey(
+                        name: "FK__Notificat__Stude__59063A47",
+                        column: x => x.StudentID,
+                        principalTable: "Student",
+                        principalColumn: "StudentID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StudentId = table.Column<string>(type: "varchar(20)", nullable: true),
+                    TeacherId = table.Column<string>(type: "varchar(20)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Student_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Student",
+                        principalColumn: "StudentID",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Teacher_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "Teacher",
+                        principalColumn: "TeacherID",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Course",
+                columns: table => new
+                {
+                    CourseID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
+                    GradeID = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    DiscountPercent = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
+                    DurationDays = table.Column<int>(type: "int", nullable: false, defaultValue: 150),
+                    TeacherID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Course__C92D7187A149D585", x => x.CourseID);
+                    table.ForeignKey(
+                        name: "FK__Course__GradeID__45F365D3",
+                        column: x => x.GradeID,
+                        principalTable: "GradeLevel",
+                        principalColumn: "GradeID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK__Course__TeacherI__44FF419A",
+                        column: x => x.TeacherID,
+                        principalTable: "Teacher",
+                        principalColumn: "TeacherID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -214,133 +349,6 @@ namespace CourseSellingWebsite.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Student",
-                columns: table => new
-                {
-                    StudentID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    PassHash = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
-                    GradeID = table.Column<int>(type: "int", nullable: true),
-                    AvatarUrl = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    BirthDate = table.Column<DateOnly>(type: "date", nullable: true),
-                    Gender = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    RegisteredAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Student__32C52A7975AEFD28", x => x.StudentID);
-                    table.ForeignKey(
-                        name: "FK__Student__GradeID__5441852A",
-                        column: x => x.GradeID,
-                        principalTable: "GradeLevel",
-                        principalColumn: "GradeID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Teacher",
-                columns: table => new
-                {
-                    TeacherID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    PassHash = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
-                    AvatarUrl = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    TeachingSubjectID = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: true),
-                    Gender = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "char(10)", unicode: false, fixedLength: true, maxLength: 10, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Teacher__EDF259444E83A452", x => x.TeacherID);
-                    table.ForeignKey(
-                        name: "FK_Teacher_Subject",
-                        column: x => x.TeachingSubjectID,
-                        principalTable: "Subject",
-                        principalColumn: "SubjectID",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Cart",
-                columns: table => new
-                {
-                    CartID = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: false),
-                    StudentID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Cart__51BCD797EA5E21E3", x => x.CartID);
-                    table.ForeignKey(
-                        name: "FK__Cart__StudentID__628FA481",
-                        column: x => x.StudentID,
-                        principalTable: "Student",
-                        principalColumn: "StudentID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Notification",
-                columns: table => new
-                {
-                    NotificationID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Body = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    IsRead = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Notifica__00C9D89AD111053D", x => new { x.StudentID, x.NotificationID });
-                    table.ForeignKey(
-                        name: "FK__Notificat__Stude__59063A47",
-                        column: x => x.StudentID,
-                        principalTable: "Student",
-                        principalColumn: "StudentID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Course",
-                columns: table => new
-                {
-                    CourseID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
-                    GradeID = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    DiscountPercent = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
-                    DurationDays = table.Column<int>(type: "int", nullable: false, defaultValue: 150),
-                    TeacherID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Course__C92D71873DE2481F", x => x.CourseID);
-                    table.ForeignKey(
-                        name: "FK__Course__GradeID__45F365D3",
-                        column: x => x.GradeID,
-                        principalTable: "GradeLevel",
-                        principalColumn: "GradeID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK__Course__TeacherI__44FF419A",
-                        column: x => x.TeacherID,
-                        principalTable: "Teacher",
-                        principalColumn: "TeacherID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CartDetail",
                 columns: table => new
                 {
@@ -349,7 +357,7 @@ namespace CourseSellingWebsite.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__CartDeta__3D2E008F39661F8D", x => new { x.CartID, x.CourseID });
+                    table.PrimaryKey("PK__CartDeta__3D2E008FEF1E2C01", x => new { x.CartID, x.CourseID });
                     table.ForeignKey(
                         name: "FK__CartDetai__CartI__656C112C",
                         column: x => x.CartID,
@@ -373,7 +381,7 @@ namespace CourseSellingWebsite.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__CourseGo__8031A6B600F18EA4", x => new { x.CourseID, x.GoalOrder });
+                    table.PrimaryKey("PK__CourseGo__8031A6B67FD923F1", x => new { x.CourseID, x.GoalOrder });
                     table.ForeignKey(
                         name: "FK__CourseGoa__Cours__48CFD27E",
                         column: x => x.CourseID,
@@ -392,7 +400,7 @@ namespace CourseSellingWebsite.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__CourseRe__7D70E0DC5094482D", x => new { x.CourseID, x.RequirementOrder });
+                    table.PrimaryKey("PK__CourseRe__7D70E0DCBB64C459", x => new { x.CourseID, x.RequirementOrder });
                     table.ForeignKey(
                         name: "FK__CourseReq__Cours__4BAC3F29",
                         column: x => x.CourseID,
@@ -414,7 +422,7 @@ namespace CourseSellingWebsite.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__CourseRe__74BC79AEAA7FE370", x => x.ReviewID);
+                    table.PrimaryKey("PK__CourseRe__74BC79AE54654468", x => x.ReviewID);
                     table.ForeignKey(
                         name: "FK__CourseRev__Cours__7B5B524B",
                         column: x => x.CourseID,
@@ -437,7 +445,7 @@ namespace CourseSellingWebsite.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__CourseSt__4A012320AC94E061", x => new { x.CourseID, x.StudentID });
+                    table.PrimaryKey("PK__CourseSt__4A01232041B8BE7B", x => new { x.CourseID, x.StudentID });
                     table.ForeignKey(
                         name: "FK__CourseStu__Cours__6E01572D",
                         column: x => x.CourseID,
@@ -464,7 +472,7 @@ namespace CourseSellingWebsite.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Lesson__B084ACB03DDEA67D", x => x.LessonID);
+                    table.PrimaryKey("PK__Lesson__B084ACB05A55EE20", x => x.LessonID);
                     table.ForeignKey(
                         name: "FK__Lesson__CourseID__4F7CD00D",
                         column: x => x.CourseID,
@@ -484,7 +492,7 @@ namespace CourseSellingWebsite.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__OrderHis__C3905BAFFEC40618", x => x.OrderID);
+                    table.PrimaryKey("PK__OrderHis__C3905BAFC2A89AE8", x => x.OrderID);
                     table.ForeignKey(
                         name: "FK__OrderHistory__6A30C649",
                         columns: x => new { x.CartID, x.CourseID },
@@ -504,7 +512,7 @@ namespace CourseSellingWebsite.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__CoursePr__29CD60B271457328", x => new { x.StudentID, x.LessonID });
+                    table.PrimaryKey("PK__CoursePr__29CD60B296375075", x => new { x.StudentID, x.LessonID });
                     table.ForeignKey(
                         name: "FK__CoursePro__Lesso__5EBF139D",
                         column: x => x.LessonID,
@@ -532,7 +540,7 @@ namespace CourseSellingWebsite.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__LessonCo__C3B4DFAA49C4C20F", x => x.CommentID);
+                    table.PrimaryKey("PK__LessonCo__C3B4DFAABC100AD1", x => x.CommentID);
                     table.ForeignKey(
                         name: "FK__LessonCom__Lesso__74AE54BC",
                         column: x => x.LessonID,
@@ -546,7 +554,7 @@ namespace CourseSellingWebsite.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Admin__A9D105346B928DD3",
+                name: "UQ__Admin__A9D10534FADE1E2B",
                 table: "Admin",
                 column: "Email",
                 unique: true);
@@ -582,6 +590,16 @@ namespace CourseSellingWebsite.Migrations
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_StudentId",
+                table: "AspNetUsers",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_TeacherId",
+                table: "AspNetUsers",
+                column: "TeacherId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -631,7 +649,7 @@ namespace CourseSellingWebsite.Migrations
                 column: "StudentID");
 
             migrationBuilder.CreateIndex(
-                name: "UQ__GradeLev__737584F6732C6B4C",
+                name: "UQ__GradeLev__737584F6B2508E61",
                 table: "GradeLevel",
                 column: "Name",
                 unique: true);
@@ -662,13 +680,13 @@ namespace CourseSellingWebsite.Migrations
                 column: "GradeID");
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Student__A9D10534922BE31C",
+                name: "UQ__Student__A9D1053418B26D87",
                 table: "Student",
                 column: "Email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Subject__737584F6F0E1067D",
+                name: "UQ__Subject__737584F633484795",
                 table: "Subject",
                 column: "Name",
                 unique: true);
@@ -679,7 +697,7 @@ namespace CourseSellingWebsite.Migrations
                 column: "TeachingSubjectID");
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Teacher__A9D10534F70DC5FB",
+                name: "UQ__Teacher__A9D10534C458590B",
                 table: "Teacher",
                 column: "Email",
                 unique: true);

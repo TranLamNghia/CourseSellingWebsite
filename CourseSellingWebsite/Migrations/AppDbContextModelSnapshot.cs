@@ -44,19 +44,14 @@ namespace CourseSellingWebsite.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("PassHash")
-                        .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(max)");
-
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("AdminId")
-                        .HasName("PK__Admin__719FE4E864F68BB3");
+                        .HasName("PK__Admin__719FE4E8C823D499");
 
-                    b.HasIndex(new[] { "Email" }, "UQ__Admin__A9D105346B928DD3")
+                    b.HasIndex(new[] { "Email" }, "UQ__Admin__A9D10534FADE1E2B")
                         .IsUnique();
 
                     b.ToTable("Admin", (string)null);
@@ -98,9 +93,6 @@ namespace CourseSellingWebsite.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PersonType")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -111,10 +103,10 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StudentId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(20)");
 
                     b.Property<string>("TeacherId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(20)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -132,6 +124,10 @@ namespace CourseSellingWebsite.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -157,7 +153,7 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnName("StudentID");
 
                     b.HasKey("CartId")
-                        .HasName("PK__Cart__51BCD797EA5E21E3");
+                        .HasName("PK__Cart__51BCD797E954E92B");
 
                     b.HasIndex("StudentId");
 
@@ -184,7 +180,7 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnName("CourseID");
 
                     b.HasKey("CartId", "CourseId")
-                        .HasName("PK__CartDeta__3D2E008F39661F8D");
+                        .HasName("PK__CartDeta__3D2E008FEF1E2C01");
 
                     b.HasIndex("CourseId");
 
@@ -240,7 +236,7 @@ namespace CourseSellingWebsite.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.HasKey("CourseId")
-                        .HasName("PK__Course__C92D71873DE2481F");
+                        .HasName("PK__Course__C92D7187A149D585");
 
                     b.HasIndex("GradeId");
 
@@ -271,7 +267,7 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.HasKey("CourseId", "GoalOrder")
-                        .HasName("PK__CourseGo__8031A6B600F18EA4");
+                        .HasName("PK__CourseGo__8031A6B67FD923F1");
 
                     b.ToTable("CourseGoal", (string)null);
                 });
@@ -299,7 +295,7 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnType("tinyint");
 
                     b.HasKey("StudentId", "LessonId")
-                        .HasName("PK__CoursePr__29CD60B271457328");
+                        .HasName("PK__CoursePr__29CD60B296375075");
 
                     b.HasIndex("LessonId");
 
@@ -321,7 +317,7 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CourseId")
-                        .HasName("PK__CourseRa__C92D7187670360EF");
+                        .HasName("PK__CourseRa__C92D7187EF4AF8EB");
 
                     b.ToTable("CourseRatingStats");
                 });
@@ -343,7 +339,7 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.HasKey("CourseId", "RequirementOrder")
-                        .HasName("PK__CourseRe__7D70E0DC5094482D");
+                        .HasName("PK__CourseRe__7D70E0DCBB64C459");
 
                     b.ToTable("CourseRequirement", (string)null);
                 });
@@ -380,7 +376,7 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnName("StudentID");
 
                     b.HasKey("ReviewId")
-                        .HasName("PK__CourseRe__74BC79AEAA7FE370");
+                        .HasName("PK__CourseRe__74BC79AE54654468");
 
                     b.HasIndex("CourseId");
 
@@ -414,7 +410,7 @@ namespace CourseSellingWebsite.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.HasKey("CourseId", "StudentId")
-                        .HasName("PK__CourseSt__4A012320AC94E061");
+                        .HasName("PK__CourseSt__4A01232041B8BE7B");
 
                     b.HasIndex("StudentId");
 
@@ -436,9 +432,9 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("GradeId")
-                        .HasName("PK__GradeLev__54F87A37D5BFDB69");
+                        .HasName("PK__GradeLev__54F87A37D7E892AF");
 
-                    b.HasIndex(new[] { "Name" }, "UQ__GradeLev__737584F6732C6B4C")
+                    b.HasIndex(new[] { "Name" }, "UQ__GradeLev__737584F6B2508E61")
                         .IsUnique();
 
                     b.ToTable("GradeLevel", (string)null);
@@ -477,7 +473,7 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.HasKey("LessonId")
-                        .HasName("PK__Lesson__B084ACB03DDEA67D");
+                        .HasName("PK__Lesson__B084ACB05A55EE20");
 
                     b.HasIndex("CourseId");
 
@@ -535,7 +531,7 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnType("varchar(10)");
 
                     b.HasKey("CommentId")
-                        .HasName("PK__LessonCo__C3B4DFAA49C4C20F");
+                        .HasName("PK__LessonCo__C3B4DFAABC100AD1");
 
                     b.HasIndex("LessonId");
 
@@ -583,7 +579,7 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("StudentId", "NotificationId")
-                        .HasName("PK__Notifica__00C9D89AD111053D");
+                        .HasName("PK__Notifica__00C9D89A8B65898F");
 
                     b.ToTable("Notification", (string)null);
                 });
@@ -616,7 +612,7 @@ namespace CourseSellingWebsite.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.HasKey("OrderId")
-                        .HasName("PK__OrderHis__C3905BAFFEC40618");
+                        .HasName("PK__OrderHis__C3905BAFC2A89AE8");
 
                     b.HasIndex("CartId", "CourseId");
 
@@ -665,11 +661,6 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnType("int")
                         .HasColumnName("GradeID");
 
-                    b.Property<string>("PassHash")
-                        .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(max)");
-
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -680,11 +671,11 @@ namespace CourseSellingWebsite.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.HasKey("StudentId")
-                        .HasName("PK__Student__32C52A7975AEFD28");
+                        .HasName("PK__Student__32C52A79853677EE");
 
                     b.HasIndex("GradeId");
 
-                    b.HasIndex(new[] { "Email" }, "UQ__Student__A9D10534922BE31C")
+                    b.HasIndex(new[] { "Email" }, "UQ__Student__A9D1053418B26D87")
                         .IsUnique();
 
                     b.ToTable("Student", null, t =>
@@ -709,9 +700,9 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnType("nvarchar(30)");
 
                     b.HasKey("SubjectId")
-                        .HasName("PK__Subject__AC1BA388A402B0FD");
+                        .HasName("PK__Subject__AC1BA388DC48C962");
 
-                    b.HasIndex(new[] { "Name" }, "UQ__Subject__737584F6F0E1067D")
+                    b.HasIndex(new[] { "Name" }, "UQ__Subject__737584F633484795")
                         .IsUnique();
 
                     b.ToTable("Subject", (string)null);
@@ -752,11 +743,6 @@ namespace CourseSellingWebsite.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("PassHash")
-                        .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(max)");
-
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(10)
                         .IsUnicode(false)
@@ -770,11 +756,11 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnName("TeachingSubjectID");
 
                     b.HasKey("TeacherId")
-                        .HasName("PK__Teacher__EDF259444E83A452");
+                        .HasName("PK__Teacher__EDF25944E1FCA7A8");
 
                     b.HasIndex("TeachingSubjectId");
 
-                    b.HasIndex(new[] { "Email" }, "UQ__Teacher__A9D10534F70DC5FB")
+                    b.HasIndex(new[] { "Email" }, "UQ__Teacher__A9D10534C458590B")
                         .IsUnique();
 
                     b.ToTable("Teacher", null, t =>
@@ -950,6 +936,23 @@ namespace CourseSellingWebsite.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("CourseSellingWebsite.Models.AppUser", b =>
+                {
+                    b.HasOne("CourseSellingWebsite.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("CourseSellingWebsite.Models.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("CourseSellingWebsite.Models.Cart", b =>

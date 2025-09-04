@@ -1,6 +1,8 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using CourseSellingWebsite.Models;
 using CourseSellingWebsite.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,12 +11,16 @@ namespace CourseSellingWebsite.Controllers
     public class HomeController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly SignInManager<AppUser> _signIn;
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<AppUser> _users;
 
-        public HomeController(ILogger<HomeController> logger, AppDbContext context)
+        public HomeController(AppDbContext context, ILogger<HomeController> logger, SignInManager<AppUser> signIn, UserManager<AppUser> users)
         {
             _context = context;
+            _signIn = signIn;
             _logger = logger;
+            _users = users;
         }
 
         public IActionResult Index()
@@ -56,9 +62,45 @@ namespace CourseSellingWebsite.Controllers
 
         [HttpPost]
         [Route("/signin")]
-        public async Task<IActionResult> SignIn(Student st)
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public async Task<IActionResult> SignIn(SignInVM model, string? returnUrl = null)
         {
-            return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+            if (!ModelState.IsValid) return View(model);
+
+            string selectedRole = model.UserType.Trim().ToLower() switch
+            {
+                "admin" => "Admin",
+                "teacher" => "Teacher",
+                "student" => "Student"
+            };
+
+            var user = await _users.FindByNameAsync(model.UserName);
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "Không tìm thấy người này");
+                return View(model);
+            }
+
+            var userRole = await _users.IsInRoleAsync(user, selectedRole);
+            if (!userRole) {
+                ModelState.AddModelError("", "Không tìm thấy người này");
+                return View(model);
+            }
+
+            var result = await _signIn.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, "Sai tài khoản hoặc mật khẩu");
+                return View(model);
+            }
+
+            return selectedRole switch
+            {
+                "Admin" => RedirectToAction("Index", "Dashboard", new { area = "Admin" }),
+                "Teacher" => RedirectToAction("Index", "Home", new { area = "Teacher" }),
+                _ => RedirectToAction("Index", "Home", new { area = "Student" }),
+            };
         }
 
         [HttpGet]
@@ -67,6 +109,14 @@ namespace CourseSellingWebsite.Controllers
         {
             return View(new SignUpVM());
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signIn.SignOutAsync();
+            return RedirectToAction("Login");
+        }
+
 
         public IActionResult Privacy()
         {

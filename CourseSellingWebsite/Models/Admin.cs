@@ -9,8 +9,6 @@ public partial class Admin
 
     public string FullName { get; set; } = null!;
 
-    public string PassHash { get; set; } = null!;
-
     public string? AvatarUrl { get; set; }
 
     public string Email { get; set; } = null!;

@@ -1,11 +1,13 @@
 ﻿using CourseSellingWebsite.Areas.Student.ViewModels;
 using CourseSellingWebsite.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CourseSellingWebsite.Areas.Student.Controllers
 {
     [Area("Student")]
+    [Authorize(Roles = "Student")]
     public class HomeController : Controller
     {
         private readonly AppDbContext _context;

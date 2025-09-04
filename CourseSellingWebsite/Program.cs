@@ -1,4 +1,4 @@
-using CourseSellingWebsite.Models;
+﻿using CourseSellingWebsite.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +6,7 @@ namespace CourseSellingWebsite
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -57,7 +57,38 @@ namespace CourseSellingWebsite
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
+            await SeedIdentityAsync(app.Services);
+
             app.Run();
+        }
+
+        public static async Task SeedIdentityAsync(IServiceProvider sp)
+        {
+            using var scope = sp.CreateScope();
+            var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+
+            string[] roles = { "Admin", "Student", "Teacher" };
+            foreach (var r in roles)
+                if (!await roleMgr.RoleExistsAsync(r))
+                    await roleMgr.CreateAsync(new IdentityRole(r));
+
+            // Admin mặc định (nếu chưa tồn tại)
+            var admin = await userMgr.FindByNameAsync("admin");
+            if (admin == null)
+            {
+                admin = new AppUser { UserName = "admin", Email = "admin@site.com", EmailConfirmed = true };
+                await userMgr.CreateAsync(admin, "Admin@123");   // nhớ đổi mật khẩu
+                await userMgr.AddToRoleAsync(admin, "Admin");
+            }
+
+            var student = await userMgr.FindByNameAsync("student");
+            if (student == null)
+            {
+                student = new AppUser { UserName = "student", Email = "student@site.com", EmailConfirmed = true };
+                await userMgr.CreateAsync(student, "Student@123");   // nhớ đổi mật khẩu
+                await userMgr.AddToRoleAsync(student, "Student");
+            }
         }
     }
 }

@@ -2,6 +2,10 @@
     Layout = null;
 }
 @model CourseSellingWebsite.ViewModels.SignInVM
+@{
+    var isAdmin = string.Equals(Model?.UserType, "admin", StringComparison.OrdinalIgnoreCase);
+    var cardModeClass = isAdmin ? "admin-mode" : "student-mode";
+}
 <head>
     <link rel="stylesheet" href="~/css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,8 +21,8 @@
             <!-- User Type Toggle -->
             <div class="user-type-toggle">
                 <div class="toggle-container">
-                    <input type="radio" id="student" name="userTypeRadio" value="student" checked>
-                    <input type="radio" id="admin" name="userTypeRadio" value="admin">
+                    <input type="radio" id="student" asp-for="UserType" value="student" checked="checked"/>
+                    <input type="radio" id="admin" asp-for="UserType" value="admin" />
                     <div class="toggle-slider"></div>
                     <label for="student" class="toggle-label">
                         <i class="fas fa-user-graduate"></i>
@@ -35,12 +39,12 @@
                 @Html.AntiForgeryToken()
                 <input type="hidden" id="UserType" asp-for="UserType" value="student" />
                 <div class="form-group">
-                    <label asp-for="DienThoai">Số điện thoại</label>
+                    <label asp-for="UserName">Tên đăng nhập</label>
                     <div class="input-wrapper">
-                        <i class="fas fa-phone"></i>
-                        <input asp-for="DienThoai" class="form-control" placeholder="Nhập số điện thoại" required>
+                        <i class="fas fa-user"></i>
+                        <input asp-for="UserName" class="form-control" placeholder="Nhập tên đăng nhập" required>
                     </div>
-                    <span asp-validation-for="DienThoai" class="text-danger"></span>
+                    <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
@@ -90,6 +94,18 @@
             return;
         }
 
+        const student = document.getElementById('student');
+        const admin = document.getElementById('admin');
+        const card = document.querySelector('.auth-card');
+
+        function applyMode() {
+          if (admin.checked) { card.classList.add('admin-mode'); card.classList.remove('student-mode'); }
+          else { card.classList.add('student-mode'); card.classList.remove('admin-mode'); }
+        }
+        student?.addEventListener('change', applyMode);
+        admin?.addEventListener('change', applyMode);
+        applyMode();
+
         studentRadio.addEventListener('change', handleToggle);
         adminRadio.addEventListener('change', handleToggle);
 
@@ -118,9 +134,6 @@
                 }
             }
         }
-
-        // Init
-        handleToggle();
 
         // Password toggle
         const togglePasswordBtn = document.getElementById('togglePassword');
