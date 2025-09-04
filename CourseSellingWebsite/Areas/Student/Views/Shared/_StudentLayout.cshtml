@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduLearn - Nền tảng học trực tuyến</title>
     <link rel="stylesheet" href="~/css/studentcss.css">
-    <link rel="stylesheet" href="~/css/login.css">
+    <link rel="stylesheet" href="~/css/toast.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -124,6 +124,11 @@
         </footer>
     </div>
 
+    <div id="toast-root" aria-live="polite" aria-atomic="true"></div>
+
     <script src="~/js/LayoutStudent.js"></script>
+    <script src="~/js/toast.js"></script>
+
+    @await Html.PartialAsync("_ToastScripts")
 </body>
 </html>

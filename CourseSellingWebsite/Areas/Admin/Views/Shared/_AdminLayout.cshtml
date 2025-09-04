@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>@(ViewData["Title"] ?? "EduLearn Admin")</title>
     <link rel="stylesheet" href="~/css/admincss.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/toast.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -33,5 +34,10 @@
     </script>
 
     @RenderSection("Scripts", required: false)
+
+    <div id="toast-root" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="~/js/toast.js"></script>
+    @await Html.PartialAsync("_ToastScripts")
 </body>
 </html>

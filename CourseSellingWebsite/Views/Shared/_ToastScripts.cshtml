@@ -1,0 +1,22 @@
+﻿@{
+    var hasMsg = TempData["Toast_Message"] is string;
+    var tmsg = TempData["Toast_Message"] as string ?? "";
+    var ttype = (TempData["Toast_Type"] as string) ?? "info";      // success|error|warning|info
+    var ttitle = (TempData["Toast_Title"] as string) ?? "Thông báo";
+    var tdur = TempData["Toast_Duration"]?.ToString() ?? "3500";
+}
+@if (hasMsg)
+{
+    <script>
+        if (typeof showToast === "function") {
+            showToast({
+                title: '@ttitle',
+                message: '@tmsg',
+                type: '@ttype',
+                duration: parseInt('@tdur')
+            });
+        } else {
+            console.warn("showToast() chưa sẵn sàng.");
+        }
+    </script>
+}

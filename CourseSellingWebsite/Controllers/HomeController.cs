@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using CourseSellingWebsite.Extensions;
 using CourseSellingWebsite.Models;
 using CourseSellingWebsite.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -66,7 +67,11 @@ namespace CourseSellingWebsite.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> SignIn(SignInVM model, string? returnUrl = null)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                TempData.SetToast(ToastType.Error, "Đăng nhập không thành công", "Đăng nhập");
+                return View(model);
+            }
 
             string selectedRole = model.UserType.Trim().ToLower() switch
             {
@@ -79,12 +84,14 @@ namespace CourseSellingWebsite.Controllers
             if (user == null)
             {
                 ModelState.AddModelError(string.Empty, "Không tìm thấy người này");
+                TempData.SetToast(ToastType.Error, "Không tìm thấy người này", "Đăng nhập");
                 return View(model);
             }
 
             var userRole = await _users.IsInRoleAsync(user, selectedRole);
             if (!userRole) {
                 ModelState.AddModelError("", "Không tìm thấy người này");
+                TempData.SetToast(ToastType.Error, "Không tìm thấy người này", "Đăng nhập");
                 return View(model);
             }
 
@@ -92,6 +99,7 @@ namespace CourseSellingWebsite.Controllers
             if (!result.Succeeded)
             {
                 ModelState.AddModelError(string.Empty, "Sai tài khoản hoặc mật khẩu");
+                TempData.SetToast(ToastType.Error, "Sai tài khoản hoặc mật khẩu", "Đăng nhập");
                 return View(model);
             }
 
