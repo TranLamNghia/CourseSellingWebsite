@@ -6,7 +6,6 @@ namespace CourseSellingWebsite.Models
     {
         public string? StudentId { get; set; }
         public Student? Student { get; set; }
-
         public string? TeacherId { get; set; }
         public Teacher? Teacher { get; set; }
     }

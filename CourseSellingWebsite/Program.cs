@@ -1,4 +1,5 @@
-﻿using CourseSellingWebsite.Models;
+﻿using CourseSellingWebsite.Middleware;
+using CourseSellingWebsite.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,6 +48,7 @@ namespace CourseSellingWebsite
             app.UseRouting();
 
             app.UseAuthentication();
+            app.UseMiddleware<PopulateUserInfoMiddleware>();
             app.UseAuthorization();
 
             app.MapControllerRoute(
