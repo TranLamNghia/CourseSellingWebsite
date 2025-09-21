@@ -119,6 +119,66 @@ namespace CourseSellingWebsite.Controllers
         }
 
         [HttpPost]
+        [Route("/signup")]
+        public async Task<IActionResult> SignUp(SignUpVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData.SetToast(ToastType.Error, "Thông tin đăng ký không hợp lệ", "Đăng ký");
+                return View(model);
+            }
+
+            // kiểm tra username/email đã tồn tại chưa
+            var existUser = await _users.FindByEmailAsync(model.Email);
+            if (existUser != null)
+            {
+                ModelState.AddModelError("", "Email đã tồn tại");
+                TempData.SetToast(ToastType.Error, "Email đã được sử dụng", "Đăng ký");
+                return View(model);
+            }
+
+            var newUser = new AppUser
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                PhoneNumber = model.DienThoai
+            };
+
+            var result = await _users.CreateAsync(newUser, model.Password);
+
+            if (!result.Succeeded)
+            {
+                foreach (var err in result.Errors)
+                {
+                    ModelState.AddModelError("", err.Description);
+                }
+                TempData.SetToast(ToastType.Error, "Đăng ký thất bại", "Đăng ký");
+                return View(model);
+            }
+
+            string role = model.UserType.ToLower() switch
+            {
+                "admin" => "Admin",
+                "student" => "Student",
+                _ => "Student"
+            };
+            await _users.AddToRoleAsync(newUser, role);
+
+            // Đăng nhập ngay sau khi đăng ký
+            await _signIn.SignInAsync(newUser, isPersistent: false);
+
+            TempData.SetToast(ToastType.Success, "Đăng ký thành công!", "Đăng ký");
+
+            // Điều hướng theo role
+            return role switch
+            {
+                "Admin" => RedirectToAction("Index", "Dashboard", new { area = "Admin" }),
+                "Teacher" => RedirectToAction("Index", "Home", new { area = "Teacher" }),
+                _ => RedirectToAction("Index", "Home", new { area = "Student" }),
+            };
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await _signIn.SignOutAsync();

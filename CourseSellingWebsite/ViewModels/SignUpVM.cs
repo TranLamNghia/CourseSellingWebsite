@@ -28,6 +28,6 @@ namespace CourseSellingWebsite.ViewModels
         public string Email { get; set; }
 
         [Required]
-        public string UserType { get; set; } // Student hoặc Admin
+        public string UserType { get; set; }
     }
 }

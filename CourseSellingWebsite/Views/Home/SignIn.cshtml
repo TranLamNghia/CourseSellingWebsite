@@ -40,10 +40,10 @@
                 @Html.AntiForgeryToken()
                 <input type="hidden" id="UserType" asp-for="UserType" value="student" />
                 <div class="form-group">
-                    <label asp-for="UserName">Tên đăng nhập</label>
+                    <label asp-for="UserName">Email</label>
                     <div class="input-wrapper">
                         <i class="fas fa-user"></i>
-                        <input asp-for="UserName" class="form-control" placeholder="Nhập tên đăng nhập" required>
+                        <input asp-for="UserName" class="form-control" placeholder="Nhập email" required>
                     </div>
                     <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
