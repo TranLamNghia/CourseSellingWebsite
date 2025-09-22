@@ -70,7 +70,7 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
             entity.HasIndex(e => e.Email, "UQ__Admin__A9D10534FADE1E2B").IsUnique();
 
             entity.Property(e => e.AdminId)
-                .HasMaxLength(20)
+                .HasMaxLength(450)
                 .IsUnicode(false)
                 .HasColumnName("AdminID");
             entity.Property(e => e.AvatarUrl).HasMaxLength(1000);
@@ -93,7 +93,7 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.StudentId)
-                .HasMaxLength(20)
+                .HasMaxLength(450)
                 .IsUnicode(false)
                 .HasColumnName("StudentID");
 
@@ -143,7 +143,7 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
             entity.Property(e => e.ImageUrl).HasMaxLength(1000);
             entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.TeacherId)
-                .HasMaxLength(20)
+                .HasMaxLength(450)
                 .IsUnicode(false)
                 .HasColumnName("TeacherID");
             entity.Property(e => e.Title).HasMaxLength(300);
@@ -184,7 +184,7 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
             entity.ToTable("CourseProgress");
 
             entity.Property(e => e.StudentId)
-                .HasMaxLength(20)
+                .HasMaxLength(450)
                 .IsUnicode(false)
                 .HasColumnName("StudentID");
             entity.Property(e => e.LessonId)
@@ -248,7 +248,7 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.StudentId)
-                .HasMaxLength(20)
+                .HasMaxLength(450)
                 .IsUnicode(false)
                 .HasColumnName("StudentID");
 
@@ -274,7 +274,7 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
                 .IsUnicode(false)
                 .HasColumnName("CourseID");
             entity.Property(e => e.StudentId)
-                .HasMaxLength(20)
+                .HasMaxLength(450)
                 .IsUnicode(false)
                 .HasColumnName("StudentID");
             entity.Property(e => e.EnrolledAt)
@@ -378,7 +378,7 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
             entity.ToTable("Notification");
 
             entity.Property(e => e.StudentId)
-                .HasMaxLength(20)
+                .HasMaxLength(450)
                 .IsUnicode(false)
                 .HasColumnName("StudentID");
             entity.Property(e => e.NotificationId)
@@ -431,7 +431,7 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
             entity.HasIndex(e => e.Email, "UQ__Student__A9D1053418B26D87").IsUnique();
 
             entity.Property(e => e.StudentId)
-                .HasMaxLength(20)
+                .HasMaxLength(450)
                 .IsUnicode(false)
                 .HasColumnName("StudentID");
             entity.Property(e => e.Address).HasMaxLength(500);
@@ -475,7 +475,7 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
             entity.HasIndex(e => e.Email, "UQ__Teacher__A9D10534C458590B").IsUnique();
 
             entity.Property(e => e.TeacherId)
-                .HasMaxLength(20)
+                .HasMaxLength(450)
                 .IsUnicode(false)
                 .HasColumnName("TeacherID");
             entity.Property(e => e.AvatarUrl).HasMaxLength(1000);

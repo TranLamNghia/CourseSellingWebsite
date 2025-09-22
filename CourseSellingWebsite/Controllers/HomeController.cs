@@ -128,7 +128,6 @@ namespace CourseSellingWebsite.Controllers
                 return View(model);
             }
 
-            // kiểm tra username/email đã tồn tại chưa
             var existUser = await _users.FindByEmailAsync(model.Email);
             if (existUser != null)
             {
@@ -142,6 +141,7 @@ namespace CourseSellingWebsite.Controllers
                 UserName = model.Email,
                 Email = model.Email,
                 PhoneNumber = model.DienThoai
+
             };
 
             var result = await _users.CreateAsync(newUser, model.Password);
@@ -156,6 +156,23 @@ namespace CourseSellingWebsite.Controllers
                 return View(model);
             }
 
+            if (model.UserType.ToLower().Equals("student"))
+            {
+                var student = new Student
+                {
+                    StudentId = newUser.Id,
+                    FullName = model.LastName + " " + model.FirstName,
+                    Email = model.Email,
+                    PhoneNumber = model.DienThoai,
+                    AvatarUrl = "/images/default-avatar.png"
+                };
+                _context.Students.Add(student);
+                await _context.SaveChangesAsync();
+
+                newUser.StudentId = student.StudentId;
+                await _users.UpdateAsync(newUser);
+            }
+
             string role = model.UserType.ToLower() switch
             {
                 "admin" => "Admin",
@@ -164,7 +181,6 @@ namespace CourseSellingWebsite.Controllers
             };
             await _users.AddToRoleAsync(newUser, role);
 
-            // Đăng nhập ngay sau khi đăng ký
             await _signIn.SignInAsync(newUser, isPersistent: false);
 
             TempData.SetToast(ToastType.Success, "Đăng ký thành công!", "Đăng ký");
