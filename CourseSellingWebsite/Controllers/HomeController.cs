@@ -26,10 +26,8 @@ namespace CourseSellingWebsite.Controllers
 
         public IActionResult Index()
         {
-            //select famous teacher
             var famousTeacher = _context.Teachers.Include(t => t.TeachingSubject).Take(3).ToList();
 
-            // select famous course 
             var famousCourse = _context.Courses.Take(3).Select(c => new
             {
                 c.CourseId,
@@ -139,9 +137,9 @@ namespace CourseSellingWebsite.Controllers
             var newUser = new AppUser
             {
                 UserName = model.Email,
+                FullName = model.LastName + " " + model.FirstName,
                 Email = model.Email,
                 PhoneNumber = model.DienThoai
-
             };
 
             var result = await _users.CreateAsync(newUser, model.Password);
@@ -185,20 +183,25 @@ namespace CourseSellingWebsite.Controllers
 
             TempData.SetToast(ToastType.Success, "Đăng ký thành công!", "Đăng ký");
 
-            // Điều hướng theo role
-            return role switch
-            {
-                "Admin" => RedirectToAction("Index", "Dashboard", new { area = "Admin" }),
-                "Teacher" => RedirectToAction("Index", "Home", new { area = "Teacher" }),
-                _ => RedirectToAction("Index", "Home", new { area = "Student" }),
-            };
+            return RedirectToAction("SignIn", "Home");
+            //return role switch
+            //{
+            //    "Admin" => RedirectToAction("Index", "Dashboard", new { area = "Admin" }),
+            //    "Teacher" => RedirectToAction("Index", "Home", new { area = "Teacher" }),
+            //    _ => RedirectToAction("Index", "Home", new { area = "Student" }),
+            //};
         }
 
         [HttpPost]
-        public async Task<IActionResult> Logout()
+        [Route("/signout")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignOut()
         {
             await _signIn.SignOutAsync();
-            return RedirectToAction("Login");
+            HttpContext.Items.Remove("UserInfo");
+
+            TempData.SetToast(ToastType.Success, "Đăng xuất thành công", "Hệ thống");
+            return RedirectToAction("Index", "Home");
         }
 
 

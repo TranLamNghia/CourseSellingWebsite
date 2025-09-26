@@ -26,29 +26,26 @@ namespace CourseSellingWebsite.Middleware
 
                     string avatar = "/images/default-avatar.png";
                     string email = user.Email ?? "";
+                    string displayName = user.FullName ?? "";   // <- từ AppUser
 
                     if (role == "Student" && user.StudentId != null)
                     {
-                        var s = await db.Students
-                            .Where(x => x.StudentId == user.StudentId)
-                            .Select(x => new { x.AvatarUrl, x.Email })
-                            .FirstOrDefaultAsync();
+                        var s = await db.Students.FindAsync(user.StudentId);
                         if (s != null)
                         {
                             avatar = s.AvatarUrl ?? avatar;
                             email = string.IsNullOrWhiteSpace(s.Email) ? email : s.Email!;
+                            displayName = string.IsNullOrWhiteSpace(s.FullName) ? displayName : s.FullName!;
                         }
                     }
                     else if (role == "Teacher" && user.TeacherId != null)
                     {
-                        var t = await db.Teachers
-                            .Where(x => x.TeacherId == user.TeacherId)
-                            .Select(x => new { x.AvatarUrl, x.Email })
-                            .FirstOrDefaultAsync();
+                        var t = await db.Teachers.FindAsync(user.TeacherId);
                         if (t != null)
                         {
                             avatar = t.AvatarUrl ?? avatar;
                             email = string.IsNullOrWhiteSpace(t.Email) ? email : t.Email!;
+                            displayName = string.IsNullOrWhiteSpace(t.FullName) ? displayName : t.FullName!;
                         }
                     }
 
@@ -57,7 +54,8 @@ namespace CourseSellingWebsite.Middleware
                         UserName = user.UserName ?? "",
                         Email = email,
                         Role = role,
-                        AvatarUrl = avatar
+                        AvatarUrl = avatar,
+                        DisplayName = displayName
                     };
                 }
             }

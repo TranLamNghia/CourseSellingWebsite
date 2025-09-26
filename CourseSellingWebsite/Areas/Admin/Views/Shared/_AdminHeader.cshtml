@@ -4,17 +4,43 @@
     </div>
     <div class="header-right">
         <div class="admin-profile">
-            <img src="/placeholder.svg?height=40&width=40" alt="Admin" class="admin-avatar">
-            <div class="admin-info">
-                <span class="admin-name">Admin</span>
-                <span class="admin-role">Quản trị viên</span>
-            </div>
+            @if (User.Identity.IsAuthenticated && Context.Items.ContainsKey("UserInfo"))
+            {
+                var userInfo = Context.Items["UserInfo"] as dynamic;
+                <img src="@userInfo.AvatarUrl" alt="Avatar" class="dropdown-avatar">
+                <div class="admin-info">
+                    <span class="admin-role">Admin @userInfo.DisplayName</span>
+                </div>
+            }
             <button class="dropdown-btn"><i class="fas fa-chevron-down"></i></button>
             <div class="dropdown-menu">
                 <a class="dropdown-item"><i class="fas fa-user"></i> Hồ sơ</a>
                 <a class="dropdown-item"><i class="fas fa-cog"></i> Cài đặt</a>
-                <a class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                <form asp-action="SignOut" asp-controller="Home" method="post" style="display:inline;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="dropdown-item" style="border:none;cursor:pointer;">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Đăng xuất</span>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const profile = document.querySelector('.admin-profile');
+          const btn = profile?.querySelector('.dropdown-btn');
+          const menu = profile?.querySelector('.dropdown-menu');
+
+          if (!profile || !btn || !menu) return;
+
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          menu.classList.toggle('show');
+          btn.setAttribute('aria-expanded', menu.classList.contains('show'));
+        });
+
+        document.addEventListener('click', () => menu.classList.remove('show'));
+        });
+    </script>
 </header>

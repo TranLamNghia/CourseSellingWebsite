@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CourseSellingWebsite.Migrations
 {
     /// <inheritdoc />
-    public partial class InitMigration : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,7 @@ namespace CourseSellingWebsite.Migrations
                 name: "Admin",
                 columns: table => new
                 {
-                    AdminID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
+                    AdminID = table.Column<string>(type: "varchar(450)", unicode: false, maxLength: 450, nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     AvatarUrl = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
@@ -103,7 +103,7 @@ namespace CourseSellingWebsite.Migrations
                 name: "Student",
                 columns: table => new
                 {
-                    StudentID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
+                    StudentID = table.Column<string>(type: "varchar(450)", unicode: false, maxLength: 450, nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     GradeID = table.Column<int>(type: "int", nullable: true),
                     AvatarUrl = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
@@ -129,7 +129,7 @@ namespace CourseSellingWebsite.Migrations
                 name: "Teacher",
                 columns: table => new
                 {
-                    TeacherID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
+                    TeacherID = table.Column<string>(type: "varchar(450)", unicode: false, maxLength: 450, nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     AvatarUrl = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     TeachingSubjectID = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: true),
@@ -155,7 +155,7 @@ namespace CourseSellingWebsite.Migrations
                 columns: table => new
                 {
                     CartID = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: false),
-                    StudentID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
+                    StudentID = table.Column<string>(type: "varchar(450)", unicode: false, maxLength: 450, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
@@ -175,7 +175,7 @@ namespace CourseSellingWebsite.Migrations
                 {
                     NotificationID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
+                    StudentID = table.Column<string>(type: "varchar(450)", unicode: false, maxLength: 450, nullable: false),
                     Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Body = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     IsRead = table.Column<bool>(type: "bit", nullable: false),
@@ -197,8 +197,9 @@ namespace CourseSellingWebsite.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    StudentId = table.Column<string>(type: "varchar(20)", nullable: true),
-                    TeacherId = table.Column<string>(type: "varchar(20)", nullable: true),
+                    StudentId = table.Column<string>(type: "varchar(450)", nullable: true),
+                    TeacherId = table.Column<string>(type: "varchar(450)", nullable: true),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -243,7 +244,7 @@ namespace CourseSellingWebsite.Migrations
                     Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     DiscountPercent = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
                     DurationDays = table.Column<int>(type: "int", nullable: false, defaultValue: 150),
-                    TeacherID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
+                    TeacherID = table.Column<string>(type: "varchar(450)", unicode: false, maxLength: 450, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
@@ -415,7 +416,7 @@ namespace CourseSellingWebsite.Migrations
                 {
                     ReviewID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
+                    StudentID = table.Column<string>(type: "varchar(450)", unicode: false, maxLength: 450, nullable: false),
                     CourseID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: true),
                     ReviewTime = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())")
@@ -440,7 +441,7 @@ namespace CourseSellingWebsite.Migrations
                 columns: table => new
                 {
                     CourseID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
-                    StudentID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
+                    StudentID = table.Column<string>(type: "varchar(450)", unicode: false, maxLength: 450, nullable: false),
                     EnrolledAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
@@ -505,7 +506,7 @@ namespace CourseSellingWebsite.Migrations
                 name: "CourseProgress",
                 columns: table => new
                 {
-                    StudentID = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
+                    StudentID = table.Column<string>(type: "varchar(450)", unicode: false, maxLength: 450, nullable: false),
                     LessonID = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: false),
                     Progress = table.Column<byte>(type: "tinyint", nullable: false),
                     CompleteddAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")

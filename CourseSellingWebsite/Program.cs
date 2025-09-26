@@ -75,20 +75,30 @@ namespace CourseSellingWebsite
                 if (!await roleMgr.RoleExistsAsync(r))
                     await roleMgr.CreateAsync(new IdentityRole(r));
 
-            // Admin mặc định (nếu chưa tồn tại)
             var admin = await userMgr.FindByNameAsync("admin");
             if (admin == null)
             {
-                admin = new AppUser { UserName = "admin", Email = "admin@site.com", EmailConfirmed = true };
-                await userMgr.CreateAsync(admin, "Admin@123");   // nhớ đổi mật khẩu
+                admin = new AppUser
+                {
+                    UserName = "admin",
+                    Email = "admin@site.com",
+                    FullName = "Quản trị viên"
+                };
+                await userMgr.CreateAsync(admin, "Admin@123"); // mật khẩu mẫu
                 await userMgr.AddToRoleAsync(admin, "Admin");
             }
 
+            // Seed student
             var student = await userMgr.FindByNameAsync("student");
             if (student == null)
             {
-                student = new AppUser { UserName = "student", Email = "student@site.com", EmailConfirmed = true };
-                await userMgr.CreateAsync(student, "Student@123");   // nhớ đổi mật khẩu
+                student = new AppUser
+                {
+                    UserName = "student",
+                    Email = "student@site.com",
+                    FullName = "Sinh viên mặc định"
+                };
+                await userMgr.CreateAsync(student, "Student@123");
                 await userMgr.AddToRoleAsync(student, "Student");
             }
         }

@@ -8,6 +8,7 @@ namespace CourseSellingWebsite.Models
         public Student? Student { get; set; }
         public string? TeacherId { get; set; }
         public Teacher? Teacher { get; set; }
+        public string FullName { get; internal set; }
     }
 
 }

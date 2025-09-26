@@ -203,21 +203,18 @@ body {
 
     .admin-profile .dropdown-menu {
         position: absolute;
-        top: 100%;
+        top: calc(100% + 0.5rem);
         right: 0;
-        background-color: #ffffff;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        list-style: none;
-        padding: 10px 0;
-        margin-top: 10px;
-        min-width: 160px;
-        z-index: 1001;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        min-width: 280px;
         opacity: 0;
         visibility: hidden;
         transform: translateY(-10px);
-        transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+        transition: all 0.3s ease;
+        z-index: 1000;
+        border: 1px solid rgba(0, 0, 0, 0.1);
     }
 
         .admin-profile .dropdown-menu.show {
@@ -226,15 +223,17 @@ body {
             transform: translateY(0);
         }
 
-        .admin-profile .dropdown-menu li a {
-            display: block;
-            padding: 10px 20px;
-            color: #333;
-            text-decoration: none;
-            transition: background-color 0.2s ease;
+        .admin-profile .dropdown-menu a, .dropdown-menu button {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            width: 100%;
+            border-bottom: 1px solid #f1f5f9;
+            background-color: white;
         }
 
-            .admin-profile .dropdown-menu li a:hover {
+            .admin-profile .dropdown-menu a:hover, .dropdown-menu button:hover {
                 background-color: #f0f0f0;
             }
 

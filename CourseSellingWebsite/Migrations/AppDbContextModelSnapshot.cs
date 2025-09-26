@@ -25,9 +25,9 @@ namespace CourseSellingWebsite.Migrations
             modelBuilder.Entity("CourseSellingWebsite.Models.Admin", b =>
                 {
                     b.Property<string>("AdminId")
-                        .HasMaxLength(20)
+                        .HasMaxLength(450)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(20)")
+                        .HasColumnType("varchar(450)")
                         .HasColumnName("AdminID");
 
                     b.Property<string>("AvatarUrl")
@@ -76,6 +76,10 @@ namespace CourseSellingWebsite.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -103,10 +107,10 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StudentId")
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("varchar(450)");
 
                     b.Property<string>("TeacherId")
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("varchar(450)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -147,9 +151,9 @@ namespace CourseSellingWebsite.Migrations
 
                     b.Property<string>("StudentId")
                         .IsRequired()
-                        .HasMaxLength(20)
+                        .HasMaxLength(450)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(20)")
+                        .HasColumnType("varchar(450)")
                         .HasColumnName("StudentID");
 
                     b.HasKey("CartId")
@@ -220,9 +224,9 @@ namespace CourseSellingWebsite.Migrations
 
                     b.Property<string>("TeacherId")
                         .IsRequired()
-                        .HasMaxLength(20)
+                        .HasMaxLength(450)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(20)")
+                        .HasColumnType("varchar(450)")
                         .HasColumnName("TeacherID");
 
                     b.Property<string>("Title")
@@ -275,9 +279,9 @@ namespace CourseSellingWebsite.Migrations
             modelBuilder.Entity("CourseSellingWebsite.Models.CourseProgress", b =>
                 {
                     b.Property<string>("StudentId")
-                        .HasMaxLength(20)
+                        .HasMaxLength(450)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(20)")
+                        .HasColumnType("varchar(450)")
                         .HasColumnName("StudentID");
 
                     b.Property<string>("LessonId")
@@ -370,9 +374,9 @@ namespace CourseSellingWebsite.Migrations
 
                     b.Property<string>("StudentId")
                         .IsRequired()
-                        .HasMaxLength(20)
+                        .HasMaxLength(450)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(20)")
+                        .HasColumnType("varchar(450)")
                         .HasColumnName("StudentID");
 
                     b.HasKey("ReviewId")
@@ -399,9 +403,9 @@ namespace CourseSellingWebsite.Migrations
                         .HasColumnName("CourseID");
 
                     b.Property<string>("StudentId")
-                        .HasMaxLength(20)
+                        .HasMaxLength(450)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(20)")
+                        .HasColumnType("varchar(450)")
                         .HasColumnName("StudentID");
 
                     b.Property<DateTime>("EnrolledAt")
@@ -548,9 +552,9 @@ namespace CourseSellingWebsite.Migrations
             modelBuilder.Entity("CourseSellingWebsite.Models.Notification", b =>
                 {
                     b.Property<string>("StudentId")
-                        .HasMaxLength(20)
+                        .HasMaxLength(450)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(20)")
+                        .HasColumnType("varchar(450)")
                         .HasColumnName("StudentID");
 
                     b.Property<int>("NotificationId")
@@ -627,9 +631,9 @@ namespace CourseSellingWebsite.Migrations
             modelBuilder.Entity("CourseSellingWebsite.Models.Student", b =>
                 {
                     b.Property<string>("StudentId")
-                        .HasMaxLength(20)
+                        .HasMaxLength(450)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(20)")
+                        .HasColumnType("varchar(450)")
                         .HasColumnName("StudentID");
 
                     b.Property<string>("Address")
@@ -711,9 +715,9 @@ namespace CourseSellingWebsite.Migrations
             modelBuilder.Entity("CourseSellingWebsite.Models.Teacher", b =>
                 {
                     b.Property<string>("TeacherId")
-                        .HasMaxLength(20)
+                        .HasMaxLength(450)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(20)")
+                        .HasColumnType("varchar(450)")
                         .HasColumnName("TeacherID");
 
                     b.Property<string>("AvatarUrl")

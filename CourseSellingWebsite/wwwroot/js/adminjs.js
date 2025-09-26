@@ -3,7 +3,6 @@
         const response = await fetch(url)
         const html = await response.text()
         document.getElementById(elementId).innerHTML = html
-        // Re-attach event listeners if necessary for loaded components
         if (elementId === "sidebar") {
             setupSidebarToggle()
             setupNavLinks()
@@ -24,7 +23,6 @@ async function loadPage(pageName) {
         document.getElementById("contentBody").innerHTML = html
         updatePageTitle(pageName)
         updateActiveNavItem(pageName)
-        // Re-attach event listeners for the newly loaded page content
         setupTabButtons()
         setupSearchInputs()
     } catch (error) {
@@ -44,7 +42,7 @@ function updatePageTitle(pageName) {
         statistics: "Thống Kê",
         sales: "Báo Cáo Doanh Số",
         settings: "Cài Đặt",
-        "": "Dashboard", // Default for empty hash
+        "": "Dashboard",
     }
     const pageTitleElement = document.getElementById("pageTitle")
     if (pageTitleElement) {
@@ -62,7 +60,6 @@ function updateActiveNavItem(pageName) {
     }
 }
 
-// Functions to be called after content is loaded
 function setupSidebarToggle() {
     const toggleBtn = document.getElementById("toggleSidebar")
     const sidebar = document.getElementById("sidebar")
